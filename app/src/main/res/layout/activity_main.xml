@@ -1,0 +1,29 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rlMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/lblText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="aslkdkjasdkj"/>
+
+
+    <com.example.mustafaguven.scrollableview.customviews.CustomCardListView
+        android:id="@+id/customHorizontal"
+        android:layout_below="@id/lblText"
+        android:layout_width="wrap_content"
+        android:layout_height="200dip">
+    </com.example.mustafaguven.scrollableview.customviews.CustomCardListView>
+
+    <TextView
+        android:layout_below="@id/customHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="aslkdkjasdkj"/>
+
+
+</RelativeLayout>
