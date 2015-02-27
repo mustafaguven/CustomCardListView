@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -55,7 +56,18 @@ public class CustomCardViewList extends HorizontalScrollView {
         currentView = (ImageView) lnCardPlain.getChildAt(mActiveItemIndex);
         nextView = (ImageView) lnCardPlain.getChildAt(mActiveItemIndex+1);
 
-        scrollIt();
+        this.getViewTreeObserver().
+                addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        if (Build.VERSION.SDK_INT < 16) {
+                            getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                        } else {
+                            getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        }
+                        scrollIt();
+                    }
+                });
     }
 
 
@@ -74,49 +86,55 @@ public class CustomCardViewList extends HorizontalScrollView {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    private void playCurrentViewAnimator(View view, float quotient, int alpha){
-        ObjectAnimator animScrollX=ObjectAnimator.ofInt(this, "scrollX", (int)view.getX());
+    private void playCurrentViewAnimator(float quotient, int alpha){
+        int factor = (this.getMeasuredWidth() - currentView.getWidth()) / 2;
+
+        //Log.e("", String.format("%s %s", factor, currentView.getScrollX()));
+        ObjectAnimator animScrollX=ObjectAnimator.ofInt(this, "scrollX", currentView.getScrollX());
         animScrollX.setDuration(DURATION);
-        ObjectAnimator animScaleX =ObjectAnimator.ofFloat(view, "scaleX", quotient);
+        /*ObjectAnimator animScaleX =ObjectAnimator.ofFloat(currentView, "scaleX", quotient);
         animScaleX.setDuration(DURATION);
-        ObjectAnimator animScaleY=ObjectAnimator.ofFloat(view, "scaleY", quotient);
-        animScaleY.setDuration(DURATION);
-        ObjectAnimator animAlpha=ObjectAnimator.ofInt(view, "imageAlpha", alpha);
+        ObjectAnimator animScaleY=ObjectAnimator.ofFloat(currentView, "scaleY", quotient);
+        animScaleY.setDuration(DURATION);*/
+        ObjectAnimator animAlpha=ObjectAnimator.ofInt(currentView, "imageAlpha", alpha);
         animAlpha.setDuration(DURATION);
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.play(animScrollX).with(animScaleX).with(animScaleY).with(animAlpha);
+        animatorSet.play(animScrollX)
+                //.with(animScaleX).with(animScaleY)
+                .with(animAlpha);
         animatorSet.start();
     }
 
-    private void playNextViewAnimator(View view, float quotient, int alpha){
-        ObjectAnimator animScaleX =ObjectAnimator.ofFloat(view, "scaleX", quotient);
+    private void playNextViewAnimator(float quotient, int alpha){
+/*        ObjectAnimator animScaleX =ObjectAnimator.ofFloat(nextView, "scaleX", quotient);
         animScaleX.setDuration(DURATION);
-        ObjectAnimator animScaleY=ObjectAnimator.ofFloat(view, "scaleY", quotient);
-        animScaleY.setDuration(DURATION);
-        ObjectAnimator animAlpha=ObjectAnimator.ofInt(view, "imageAlpha", alpha);
+        ObjectAnimator animScaleY=ObjectAnimator.ofFloat(nextView, "scaleY", quotient);
+        animScaleY.setDuration(DURATION);*/
+        ObjectAnimator animAlpha=ObjectAnimator.ofInt(nextView, "imageAlpha", alpha);
         animAlpha.setDuration(DURATION);
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.play(animScaleX).with(animScaleY).with(animAlpha);
+        animatorSet.play(animAlpha)
+        //.with(animScaleY).with(animScaleX)
+        ;
         animatorSet.start();
     }
 
     private void scrollIt() {
-        /*currentView.setImageAlpha(255);*/
-        playCurrentViewAnimator(currentView, 1f, MAX_ALPHA);
+        playCurrentViewAnimator(1f, MAX_ALPHA);
         if(nextView!=null) {
-            playNextViewAnimator(nextView, 0.75f, MIN_ALPHA);
+            playNextViewAnimator(0.75f, MIN_ALPHA);
         }
-        Log.e("scrollIt", String.format("%s %s %s %s", "finished", currentView!=null, nextView!=null, mActiveItemIndex));
+        //Log.e("scrollIt", String.format("%s %s %s %s", "finished", currentView!=null, nextView!=null, mActiveItemIndex));
     }
 
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+
         super.onScrollChanged(l, t, oldl, oldt);
         findActiveItem();
         //Log.e("scrollIt", String.format("%s %s %s %s", l, oldl, Math.abs(l - oldl), mIsFling));
         if (mIsFling) {
             //Log.e("scrollIt", String.format("%s %s %s", l, oldl, Math.abs(l - oldl)));
-
             if (Math.abs(l - oldl) < THRESHOLD) {
                 scrollIt();
 
@@ -130,13 +148,8 @@ public class CustomCardViewList extends HorizontalScrollView {
         }
 
         float alpha = l / 360f * 255f;
-       // Log.e("",String.format("%s %s", l, alpha));
         if(alpha>50f && alpha < 255f) {
-
-             nextView.setImageAlpha((int) alpha);
-            //nextView.setScaleX(nextView.getScaleX() * 2 * alpha/255f);
-            //nextView.setScaleY(nextView.getScaleY() * 2 * alpha/255f);
-            //Log.e("scaleX",String.format("%s", nextView.getScaleY() * 2 * alpha/255f));
+            nextView.setImageAlpha((int) alpha);
         }
 
     }
@@ -144,35 +157,26 @@ public class CustomCardViewList extends HorizontalScrollView {
     @Override
     public void fling(int velocityX) {
         super.fling(velocityX);
-        Log.e("fling", "true");
         mIsFling = true;
     }
 
     private void findActiveItem() {
-        double scrollX = getScrollX();
-        //double horizontalViewVisibleWidth = v.getMeasuredWidth();
-        double horizontalViewVisibleWidth = 1720;
 
-        // mActiveItemIndex = (int)Math.round (scrollX/horizontalViewVisibleWidth);
-        mActiveItemIndex = (int) Math.round(scrollX / 360);
+        //mActiveItemIndex = (int) Math.round(scrollX / getMeasuredWidth());
+        mActiveItemIndex = Math.round(getScrollX() / 360);
+
+        Log.e("", String.format("%s %s", getScrollX(), mActiveItemIndex));
+
+
+        currentView = (ImageView) lnCardPlain.getChildAt(mActiveItemIndex);
+        if(currentView==null)
+            currentView = (ImageView) lnCardPlain.getChildAt(mActiveItemIndex - 1);
 
         ImageView preView = null;
         if(mActiveItemIndex>0) {
             preView = (ImageView) lnCardPlain.getChildAt(mActiveItemIndex-1);
         }
         nextView = (ImageView) lnCardPlain.getChildAt(mActiveItemIndex+1);
-
-        //double scrollX = getScrollX();
-        //double horizontalViewVisibleWidth = v.getMeasuredWidth();
-        double ceil = scrollX/horizontalViewVisibleWidth;
-        //Log.e("ceil", String.format("scrollx: %s -- ceil: %s -- mActiveItemIndex: %s",
-                //String.valueOf(scrollX), String.valueOf(ceil + "-" + Math.round(ceil)), String.valueOf(mActiveItemIndex)));
-        //int scrollTo = mActiveItemIndex * horizontalViewVisibleWidth;
-
-        currentView = (ImageView) lnCardPlain.getChildAt(mActiveItemIndex);
-        if(currentView==null)
-            currentView = (ImageView) lnCardPlain.getChildAt(mActiveItemIndex-1);
-
     }
 
 
