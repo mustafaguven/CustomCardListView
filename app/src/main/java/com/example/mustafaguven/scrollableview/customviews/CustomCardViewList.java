@@ -9,13 +9,17 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.example.mustafaguven.scrollableview.R;
 
@@ -31,6 +35,7 @@ public class CustomCardViewList extends HorizontalScrollView {
     private final float MIN_ALPHA = 50f;
     private final float MAX_ALPHA = 255f;
     private int mActiveItemIndex = 0;
+    private int mPadding = 0;
     ImageView preView, currentView, nextView;
     private LinearLayout lnCardPlain;
 
@@ -48,15 +53,13 @@ public class CustomCardViewList extends HorizontalScrollView {
     }
 
     private void init() {
+        mPadding = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
         setVerticalScrollBarEnabled(false);
         setHorizontalScrollBarEnabled(false);
         setOnTouchListener(touchListener);
         LayoutInflater layoutInflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         layoutInflater.inflate(R.layout.custom_card_view_list, this);
         lnCardPlain = (LinearLayout) findViewById(R.id.lnCardPlain);
-
-        currentView = (ImageView) lnCardPlain.getChildAt(mActiveItemIndex);
-        nextView = (ImageView) lnCardPlain.getChildAt(mActiveItemIndex+1);
 
         this.getViewTreeObserver().
                 addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -67,6 +70,7 @@ public class CustomCardViewList extends HorizontalScrollView {
                         } else {
                             getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         }
+                        findActiveItem();
                         scrollIt();
                     }
                 });
@@ -89,10 +93,7 @@ public class CustomCardViewList extends HorizontalScrollView {
     }
 
     private void playCurrentViewAnimator(float quotient, int alpha){
-        int factor = (this.getMeasuredWidth() - currentView.getWidth()) / 2;
-        Resources r = getResources();
-        int padding = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, r.getDisplayMetrics());
-        int gotoScroll = mActiveItemIndex * (currentView.getWidth()+padding - factor);
+        int gotoScroll = mActiveItemIndex * (currentView.getWidth());
 
         //Log.e("", String.format("%s %s", factor, currentView.getScrollX()));
         ObjectAnimator animScrollX=ObjectAnimator.ofInt(this, "scrollX", gotoScroll);
@@ -126,27 +127,24 @@ public class CustomCardViewList extends HorizontalScrollView {
     }
 
     private void scrollIt() {
-        playCurrentViewAnimator(1f, (int)MAX_ALPHA);
-        if(preView!=null) {
-            playNextViewAnimator(preView, 0.75f, (int)MIN_ALPHA);
+        if(currentView!=null) {
+            playCurrentViewAnimator(1f, (int) MAX_ALPHA);
+            if (preView != null) {
+                playNextViewAnimator(preView, 0.75f, (int) MIN_ALPHA);
+            }
+            if (nextView != null) {
+                playNextViewAnimator(nextView, 0.75f, (int) MIN_ALPHA);
+            }
         }
-        if(nextView!=null) {
-            playNextViewAnimator(nextView, 0.75f, (int)MIN_ALPHA);
-        }
-        //Log.e("scrollIt", String.format("%s %s %s %s", "finished", currentView!=null, nextView!=null, mActiveItemIndex));
     }
 
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
-
         super.onScrollChanged(l, t, oldl, oldt);
         findActiveItem();
-        //Log.e("scrollIt", String.format("%s %s %s %s", l, oldl, Math.abs(l - oldl), mIsFling));
         if (mIsFling) {
-            //Log.e("scrollIt", String.format("%s %s %s", l, oldl, Math.abs(l - oldl)));
             if (Math.abs(l - oldl) < THRESHOLD) {
                 scrollIt();
-
                 if (mOnEndScrollListener != null) {
                     mOnEndScrollListener.onEndScroll();
                 }
@@ -156,7 +154,7 @@ public class CustomCardViewList extends HorizontalScrollView {
             }
         }
 
-        float alpha = l / 360f * MAX_ALPHA;
+        float alpha = l / (getMeasuredWidth()/2) * MAX_ALPHA;
         if(alpha>MIN_ALPHA && alpha < MAX_ALPHA) {
             nextView.setImageAlpha((int) alpha);
         }
@@ -170,29 +168,44 @@ public class CustomCardViewList extends HorizontalScrollView {
     }
 
     private void findActiveItem() {
-
         //mActiveItemIndex = (int) Math.round(scrollX / getMeasuredWidth());
-        mActiveItemIndex = Math.round(getScrollX() / 360);
+        mActiveItemIndex = Math.round(getScrollX() / (getMeasuredWidth() / 2));
 
         Log.e("", String.format("%s %s", getScrollX(), mActiveItemIndex));
 
-
         currentView = (ImageView) lnCardPlain.getChildAt(mActiveItemIndex);
-        if(currentView==null)
-            currentView = (ImageView) lnCardPlain.getChildAt(mActiveItemIndex - 1);
-
         preView = null;
         if(mActiveItemIndex>0) {
             preView = (ImageView) lnCardPlain.getChildAt(mActiveItemIndex-1);
         }
         nextView = (ImageView) lnCardPlain.getChildAt(mActiveItemIndex+1);
+
+        if(mActiveItemIndex==0){
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins((getMeasuredWidth()-currentView.getWidth())/2, 0, 0, 0);
+            params.gravity = Gravity.CENTER;
+            currentView.setLayoutParams(params);
+        }
+
+        if(mActiveItemIndex==lnCardPlain.getChildCount()-1){
+            mActiveItemIndex = lnCardPlain.getChildCount()-1;
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(0,0,(getMeasuredWidth()-currentView.getWidth())/2, 0);
+            params.gravity = Gravity.CENTER;
+            currentView.setLayoutParams(params);
+        }
     }
 
 
     OnTouchListener touchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-
             if(event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL ){
                 findActiveItem();
                 scrollIt();
