@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -60,7 +61,7 @@ public class CustomCardViewList extends HorizontalScrollView {
                 addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
-                        if (Build.VERSION.SDK_INT < 16) {
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
                             getViewTreeObserver().removeGlobalOnLayoutListener(this);
                         } else {
                             getViewTreeObserver().removeOnGlobalLayoutListener(this);
@@ -88,6 +89,16 @@ public class CustomCardViewList extends HorizontalScrollView {
     }
 
     private void playCurrentViewAnimator(float quotient, int alpha){
+
+        for (int i = 0; i < lnCardPlain.getChildCount(); i++) {
+            if(i!=mActiveItemIndex) {
+                ImageView view = (ImageView) lnCardPlain.getChildAt(i);
+                view.setScaleX(0.75f);
+                view.setScaleY(0.75f);
+                view.setImageAlpha((int) MIN_ALPHA);
+            }
+        }
+
         int gotoScroll = mActiveItemIndex * (currentCard.getWidth());
         ObjectAnimator animScrollX=ObjectAnimator.ofInt(this, "scrollX", gotoScroll);
         animScrollX.setDuration(DURATION);
@@ -98,9 +109,7 @@ public class CustomCardViewList extends HorizontalScrollView {
         ObjectAnimator animAlpha=ObjectAnimator.ofInt(currentCard, "imageAlpha", alpha);
         animAlpha.setDuration(DURATION);
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.play(animScrollX)
-                .with(animScaleX).with(animScaleY)
-                .with(animAlpha);
+        animatorSet.play(animScrollX).with(animScaleX).with(animScaleY).with(animAlpha);
         animatorSet.start();
     }
 
@@ -112,9 +121,7 @@ public class CustomCardViewList extends HorizontalScrollView {
         ObjectAnimator animAlpha=ObjectAnimator.ofInt(v, "imageAlpha", alpha);
         animAlpha.setDuration(DURATION);
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.play(animAlpha)
-        .with(animScaleY).with(animScaleX)
-        ;
+        animatorSet.play(animAlpha).with(animScaleY).with(animScaleX);
         animatorSet.start();
     }
 
@@ -133,6 +140,8 @@ public class CustomCardViewList extends HorizontalScrollView {
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
+
+        Log.e("", String.format("%s %s", l, mActiveItemIndex));
         findActiveItem();
 
         if (mIsFling) {
@@ -152,35 +161,34 @@ public class CustomCardViewList extends HorizontalScrollView {
     public void fling(int velocityX) {
         super.fling(velocityX);
         mIsFling = true;
-        //Log.e("isfling", String.format("%s", mIsFling));
     }
 
     private void findActiveItem() {
-        //mActiveItemIndex = (int) Math.round(scrollX / getMeasuredWidth());
-        mActiveItemIndex = Math.round(getScrollX() / (getMeasuredWidth() / 2));
+        mActiveItemIndex = Math.round(getScrollX() / 450);
 
-        //Log.e("", String.format("%s %s", getScrollX(), mActiveItemIndex));
 
         setViews();
 
-        if(mActiveItemIndex==0){
+        //while the first item is showing
+        if(mActiveItemIndex == 0){
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             );
-            params.setMargins((getMeasuredWidth()- currentCard.getWidth())/2, 0, 0, 0);
+            params.setMargins((getMeasuredWidth() - currentCard.getWidth()) / 2, 0, 0, 0);
             params.gravity = Gravity.CENTER;
             currentCard.setLayoutParams(params);
         }
 
-        if(mActiveItemIndex>=lnCardPlain.getChildCount()){
+        // while the latest item is showing
+        if(mActiveItemIndex >= lnCardPlain.getChildCount()){
             mActiveItemIndex = lnCardPlain.getChildCount()-1;
             setViews();
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             );
-            params.setMargins(0,0,(getMeasuredWidth()- currentCard.getWidth())/2, 0);
+            params.setMargins(0,0,(getMeasuredWidth() - currentCard.getWidth()) / 2, 0);
             params.gravity = Gravity.CENTER;
             currentCard.setLayoutParams(params);
         }

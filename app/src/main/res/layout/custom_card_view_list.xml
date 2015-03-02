@@ -54,6 +54,38 @@
                 android:paddingLeft="10dip"
                 android:layout_toRightOf="@id/imgRes_4">
             </ImageView>
+
+            <ImageView android:id="@+id/imgRes_6"
+                android:src="@drawable/res_2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dip"
+                android:layout_toRightOf="@id/imgRes_5">
+            </ImageView>
+
+            <ImageView android:id="@+id/imgRes_7"
+                android:src="@drawable/res_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dip"
+                android:layout_toRightOf="@id/imgRes_6">
+            </ImageView>
+
+            <ImageView android:id="@+id/imgRes_8"
+                android:src="@drawable/res_2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dip"
+                android:layout_toRightOf="@id/imgRes_7">
+            </ImageView>
+
+            <ImageView android:id="@+id/imgRes_9"
+                android:src="@drawable/res_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dip"
+                android:layout_toRightOf="@id/imgRes_8">
+            </ImageView>
         </LinearLayout>
 
 
