@@ -34,18 +34,29 @@ public class CustomCardViewList extends HorizontalScrollView {
     private int mActiveItemIndex = 0;
     private float MIN_SCALE = 0.75f;
     private float MAX_SCALE = 1f;
-    private int mPadding, mMargin;
-    Button previousCard, currentCard, nextCard;
+    private int mMargin;
     private LinearLayout lnCardPlain;
+    private boolean mIsFling;
 
+    View previousCard, currentCard, nextCard;
 
+    /*
+    ******* Listeners ************************************************
+    */
+    private OnEndScrollListener mOnEndScrollListener;
+    private OnSelectedItemListener mOnSelectedItemListener;
+
+    public interface OnSelectedItemListener{
+        public void onSelectedItem(View v, int position);
+    }
 
     public interface OnEndScrollListener {
         public void onEndScroll();
     }
+    // ***************************************************************
 
-    private boolean mIsFling;
-    private OnEndScrollListener mOnEndScrollListener;
+
+
 
     public CustomCardViewList(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -53,7 +64,6 @@ public class CustomCardViewList extends HorizontalScrollView {
     }
 
     private void init() {
-        mPadding = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
         mMargin = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
         setVerticalScrollBarEnabled(false);
         setHorizontalScrollBarEnabled(false);
@@ -78,31 +88,7 @@ public class CustomCardViewList extends HorizontalScrollView {
                 });
     }
 
-    private void setMargins() {
-        //while the first item is showing
-        if (lnCardPlain != null && lnCardPlain.getChildCount() > 0) {
-            View firstItem = lnCardPlain.getChildAt(0);
-            if (firstItem != null) {
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(firstItem.getLayoutParams());
-                params.setMargins((getMeasuredWidth() - params.width) / 2, mMargin, 0, mMargin);
-                params.gravity = Gravity.CENTER;
-                firstItem.setLayoutParams(params);
-            }
 
-            // while the latest item is showing
-            if (lnCardPlain.getChildCount() > 1) {
-                View lastItem = lnCardPlain.getChildAt(lnCardPlain.getChildCount() - 1);
-                if (lastItem != null) {
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(lastItem.getLayoutParams());
-                    //below line should be put otherwise last item can not be selectable by the operator
-                    params.width = firstItem.getWidth() + 1;
-                    params.setMargins(0, mMargin, (getMeasuredWidth() - params.width) / 2, mMargin);
-                    params.gravity = Gravity.CENTER;
-                    lastItem.setLayoutParams(params);
-                }
-            }
-        }
-    }
 
 
     public CustomCardViewList(Context context, AttributeSet attrs) {
@@ -121,10 +107,9 @@ public class CustomCardViewList extends HorizontalScrollView {
     }
 
     private void playCurrentViewAnimator(float quotient, int alpha){
-
         for (int i = 0; i < lnCardPlain.getChildCount(); i++) {
             if(i!=mActiveItemIndex) {
-                Button view = (Button) lnCardPlain.getChildAt(i);
+                View view = lnCardPlain.getChildAt(i);
                 view.setScaleX(MIN_SCALE);
                 view.setScaleY(MIN_SCALE);
                 view.setAlpha(MIN_ALPHA);
@@ -132,7 +117,7 @@ public class CustomCardViewList extends HorizontalScrollView {
         }
 
         int gotoScroll = 0;
-        if(mActiveItemIndex>0)
+        if(mActiveItemIndex > 0)
             gotoScroll = (int)currentCard.getX() - ((getMeasuredWidth() - currentCard.getWidth()) / 2);
 
         ObjectAnimator animScrollX=ObjectAnimator.ofInt(this, "scrollX", gotoScroll);
@@ -163,7 +148,10 @@ public class CustomCardViewList extends HorizontalScrollView {
     private void scrollIt() {
         Log.e("", "girdi");
         if(currentCard !=null) {
-            playCurrentViewAnimator(1f, (int) MAX_ALPHA);
+            if(mOnSelectedItemListener!=null){
+                mOnSelectedItemListener.onSelectedItem(currentCard, mActiveItemIndex);
+            }
+            playCurrentViewAnimator(MAX_SCALE, (int) MAX_ALPHA);
             if (previousCard != null) {
                 playNextViewAnimator(previousCard, MIN_SCALE, (int) MIN_ALPHA);
             }
@@ -176,7 +164,6 @@ public class CustomCardViewList extends HorizontalScrollView {
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
-
 
         findActiveItem();
 
@@ -205,41 +192,68 @@ public class CustomCardViewList extends HorizontalScrollView {
         double sonuc = (getScrollX() - viewWidth) / (2*viewWidth);
         mActiveItemIndex = (int)Math.ceil(sonuc);
         Log.e("", String.format("%s %s %s %s", getScrollX(), sonuc, viewWidth, mActiveItemIndex));
-
-
-
     }
 
-    void setWidthForCard(View... views){
-        for (View v : views) {
-            if(v!=null) {
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(currentCard.getLayoutParams());
-                params.width = getMeasuredWidth() - (mMargin*8 / getDensity());
-                params.setMargins(0, mMargin, 0, mMargin);
-                params.gravity = Gravity.CENTER;
-                v.setLayoutParams(params);
-            }
-        }
-
-
+    int getViewWidth(){
+        return getMeasuredWidth() - (mMargin * 8 / getDensity());
     }
 
     int getDensity(){
         return (int) getResources().getDisplayMetrics().density < 2 ? (int) getResources().getDisplayMetrics().density : 2;
     }
 
-
     void setViews(){
-        currentCard = (Button) lnCardPlain.getChildAt(mActiveItemIndex);
-        previousCard = null;
-        if(mActiveItemIndex>0) {
-            previousCard = (Button) lnCardPlain.getChildAt(mActiveItemIndex-1);
+        currentCard = lnCardPlain.getChildAt(mActiveItemIndex);
+        if(currentCard != null) {
+
+
+            previousCard = null;
+            if (mActiveItemIndex > 0) {
+                previousCard = lnCardPlain.getChildAt(mActiveItemIndex - 1);
+            }
+            nextCard = lnCardPlain.getChildAt(mActiveItemIndex + 1);
+
+            setWidthForCard(currentCard, previousCard, nextCard);
+            setMargins();
         }
-        nextCard = (Button) lnCardPlain.getChildAt(mActiveItemIndex+1);
+    }
 
-        setWidthForCard(currentCard, previousCard, nextCard);
-        setMargins();
+    void setWidthForCard(View... views){
+        for (View v : views) {
+            if(v!=null) {
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(v.getLayoutParams());
+                params.width = getViewWidth();
+                params.setMargins(0, mMargin, 0, mMargin);
+                params.gravity = Gravity.CENTER;
+                v.setLayoutParams(params);
+            }
+        }
+    }
 
+    private void setMargins() {
+        //while the first item is showing
+        if (lnCardPlain != null && lnCardPlain.getChildCount() > 0) {
+            View firstItem = lnCardPlain.getChildAt(0);
+            if (firstItem != null) {
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(firstItem.getLayoutParams());
+                params.setMargins((getMeasuredWidth() - params.width) / 2, mMargin, 0, mMargin);
+                params.gravity = Gravity.CENTER;
+                firstItem.setLayoutParams(params);
+            }
+
+            // while the latest item is showing
+            if (lnCardPlain.getChildCount() > 1) {
+                View lastItem = lnCardPlain.getChildAt(lnCardPlain.getChildCount() - 1);
+                if (lastItem != null) {
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(lastItem.getLayoutParams());
+                    //below line should be put otherwise last item can not be selectable by the operator
+                    params.width = getViewWidth() + 1;
+                    params.setMargins(0, mMargin, (getMeasuredWidth() - params.width) / 2, mMargin);
+                    params.gravity = Gravity.CENTER;
+                    lastItem.setLayoutParams(params);
+                }
+            }
+        }
     }
 
     OnTouchListener touchListener = new View.OnTouchListener() {
@@ -261,8 +275,16 @@ public class CustomCardViewList extends HorizontalScrollView {
         return mOnEndScrollListener;
     }
 
-    public void setOnEndScrollListener(OnEndScrollListener mOnEndScrollListener) {
-        this.mOnEndScrollListener = mOnEndScrollListener;
+    public void setOnEndScrollListener(OnEndScrollListener onEndScrollListener) {
+        this.mOnEndScrollListener = onEndScrollListener;
+    }
+
+    public OnSelectedItemListener getOnSelectedItemListener() {
+        return mOnSelectedItemListener;
+    }
+
+    public void setOnSelectedItemListener(OnSelectedItemListener onSelectedItemListener) {
+        this.mOnSelectedItemListener = onSelectedItemListener;
     }
 
 

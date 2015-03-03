@@ -4,6 +4,10 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
+import com.example.mustafaguven.scrollableview.customviews.CustomCardViewList;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -12,7 +16,13 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        CustomCardViewList c = (CustomCardViewList)findViewById(R.id.myCustomCardViewList);
+        c.setOnSelectedItemListener(new CustomCardViewList.OnSelectedItemListener() {
+            @Override
+            public void onSelectedItem(View v, int position) {
+                Toast.makeText(MainActivity.this, String.format("Position: %s, View: %s", position, v), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 

@@ -6,7 +6,7 @@
     tools:context=".MainActivity">
 
     <com.example.mustafaguven.scrollableview.customviews.CustomCardViewList
-        android:id="@+id/customHorizontal"
+        android:id="@+id/myCustomCardViewList"
         android:layout_width="match_parent"
         android:layout_height="200dip">
     </com.example.mustafaguven.scrollableview.customviews.CustomCardViewList>

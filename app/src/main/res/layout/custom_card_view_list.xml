@@ -15,8 +15,40 @@
             android:orientation="horizontal"
             android:background="@color/grey">
 
+            <TextView
+                android:id="@+id/imgRes_2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dip"
+                android:text="1"
+                android:textSize="20sp"
+                android:background="@color/blue"
+                android:gravity="center" >
+            </TextView>
 
+            <TextView
+                android:id="@+id/imgRes_3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dip"
+                android:text="2"
+                android:textSize="20sp"
+                android:background="@color/red"
+                android:gravity="center"  >
+            </TextView>
 
+            <TextView
+                android:id="@+id/imgRes_1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dip"
+                android:text="3"
+                android:textSize="20sp"
+                android:background="@color/green"
+                android:gravity="center"  >
+            </TextView>
+
+<!--
             <Button
                 android:id="@+id/imgRes_2"
                 android:layout_width="200dip"
@@ -43,7 +75,7 @@
                 android:background="@color/green"
                 android:orientation="horizontal">
             </Button>
-            <!--
+
                         <Button
                             android:id="@+id/imgRes_4"
                             android:layout_width="200dip"
@@ -112,10 +144,10 @@
                             android:layout_width="200dip"
                             android:layout_height="match_parent"
                             android:paddingLeft="10dip"
-                            android:background="@color/red"
+                            android:background="@color/blue"
                             android:orientation="horizontal">
-                        </Button>
-            -->
+                        </Button>-->
+            <!---->
             <!--<ImageView android:id="@+id/imgRes_1"
                 android:src="@drawable/res_1"
                 android:layout_width="match_parent"
