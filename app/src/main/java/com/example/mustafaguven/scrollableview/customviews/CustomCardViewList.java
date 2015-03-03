@@ -71,10 +71,37 @@ public class CustomCardViewList extends HorizontalScrollView {
                         } else {
                             getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         }
+
                         findActiveItem();
                         scrollIt();
                     }
                 });
+    }
+
+    private void setMargins() {
+        //while the first item is showing
+        if (lnCardPlain != null && lnCardPlain.getChildCount() > 0) {
+            View firstItem = lnCardPlain.getChildAt(0);
+            if (firstItem != null) {
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(firstItem.getLayoutParams());
+                params.setMargins((getMeasuredWidth() - params.width) / 2, mMargin, 0, mMargin);
+                params.gravity = Gravity.CENTER;
+                firstItem.setLayoutParams(params);
+            }
+
+            // while the latest item is showing
+            if (lnCardPlain.getChildCount() > 1) {
+                View lastItem = lnCardPlain.getChildAt(lnCardPlain.getChildCount() - 1);
+                if (lastItem != null) {
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(lastItem.getLayoutParams());
+                    //below line should be put otherwise last item can not be selectable by the operator
+                    params.width = firstItem.getWidth() + 1;
+                    params.setMargins(0, mMargin, (getMeasuredWidth() - params.width) / 2, mMargin);
+                    params.gravity = Gravity.CENTER;
+                    lastItem.setLayoutParams(params);
+                }
+            }
+        }
     }
 
 
@@ -100,7 +127,7 @@ public class CustomCardViewList extends HorizontalScrollView {
                 Button view = (Button) lnCardPlain.getChildAt(i);
                 view.setScaleX(MIN_SCALE);
                 view.setScaleY(MIN_SCALE);
-                view.setAlpha((int) MIN_ALPHA);
+                view.setAlpha(MIN_ALPHA);
             }
         }
 
@@ -174,50 +201,26 @@ public class CustomCardViewList extends HorizontalScrollView {
 
     private void findActiveItem() {
         setViews();
-      //  mActiveItemIndex = getScrollX() / (getMeasuredWidth()/2);
-
-        double x = Math.ceil((getScrollX() - (currentCard.getWidth()/2))/currentCard.getWidth());
-
         double viewWidth = currentCard.getWidth()/2;
         double sonuc = (getScrollX() - viewWidth) / (2*viewWidth);
         mActiveItemIndex = (int)Math.ceil(sonuc);
-        Log.e("", String.format("%s %s %s %s", getScrollX(), sonuc, currentCard.getWidth(), mActiveItemIndex));
+        Log.e("", String.format("%s %s %s %s", getScrollX(), sonuc, viewWidth, mActiveItemIndex));
 
 
-        //while the first item is showing
-        if(mActiveItemIndex == 0){
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(currentCard.getLayoutParams());
-            //params.width = getMeasuredWidth() - (mMargin*8/getDensity());
-            //params.setMargins(0, mMargin, 0, mMargin);
-            params.setMargins((getMeasuredWidth() - params.width) / 2, mMargin, 0, mMargin);
-            params.gravity = Gravity.CENTER;
-            currentCard.setLayoutParams(params);
-        }
 
-        // while the latest item is showing
-        if(mActiveItemIndex >= lnCardPlain.getChildCount()){
-            mActiveItemIndex = lnCardPlain.getChildCount()-1;
-            setViews();
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-            params.setMargins(0,0,(getMeasuredWidth() - currentCard.getWidth()) / 2, 0);
-            params.gravity = Gravity.CENTER;
-            currentCard.setLayoutParams(params);
-        }
     }
 
     void setWidthForCard(View... views){
         for (View v : views) {
             if(v!=null) {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(currentCard.getLayoutParams());
-                params.width = getMeasuredWidth() - (mMargin*8/getDensity());
+                params.width = getMeasuredWidth() - (mMargin*8 / getDensity());
                 params.setMargins(0, mMargin, 0, mMargin);
                 params.gravity = Gravity.CENTER;
                 v.setLayoutParams(params);
             }
         }
+
 
     }
 
@@ -235,6 +238,8 @@ public class CustomCardViewList extends HorizontalScrollView {
         nextCard = (Button) lnCardPlain.getChildAt(mActiveItemIndex+1);
 
         setWidthForCard(currentCard, previousCard, nextCard);
+        setMargins();
+
     }
 
     OnTouchListener touchListener = new View.OnTouchListener() {
