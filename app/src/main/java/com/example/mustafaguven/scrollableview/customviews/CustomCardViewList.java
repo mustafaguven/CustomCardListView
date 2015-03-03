@@ -150,7 +150,7 @@ public class CustomCardViewList extends HorizontalScrollView {
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
 
-        Log.e("", String.format("%s %s", l, mActiveItemIndex));
+
         findActiveItem();
 
         if (mIsFling) {
@@ -173,14 +173,21 @@ public class CustomCardViewList extends HorizontalScrollView {
     }
 
     private void findActiveItem() {
-        mActiveItemIndex = Math.round(getScrollX() / (getMeasuredWidth()/2));
-
         setViews();
+      //  mActiveItemIndex = getScrollX() / (getMeasuredWidth()/2);
+
+        double x = Math.ceil((getScrollX() - (currentCard.getWidth()/2))/currentCard.getWidth());
+
+        double viewWidth = currentCard.getWidth()/2;
+        double sonuc = (getScrollX() - viewWidth) / (2*viewWidth);
+        mActiveItemIndex = (int)Math.ceil(sonuc);
+        Log.e("", String.format("%s %s %s %s", getScrollX(), sonuc, currentCard.getWidth(), mActiveItemIndex));
+
 
         //while the first item is showing
         if(mActiveItemIndex == 0){
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(currentCard.getLayoutParams());
-            params.width = getMeasuredWidth() - (mMargin*4);
+            //params.width = getMeasuredWidth() - (mMargin*8/getDensity());
             //params.setMargins(0, mMargin, 0, mMargin);
             params.setMargins((getMeasuredWidth() - params.width) / 2, mMargin, 0, mMargin);
             params.gravity = Gravity.CENTER;
@@ -205,7 +212,7 @@ public class CustomCardViewList extends HorizontalScrollView {
         for (View v : views) {
             if(v!=null) {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(currentCard.getLayoutParams());
-                params.width = getMeasuredWidth() - (mMargin*4);
+                params.width = getMeasuredWidth() - (mMargin*8/getDensity());
                 params.setMargins(0, mMargin, 0, mMargin);
                 params.gravity = Gravity.CENTER;
                 v.setLayoutParams(params);
@@ -213,6 +220,11 @@ public class CustomCardViewList extends HorizontalScrollView {
         }
 
     }
+
+    int getDensity(){
+        return (int) getResources().getDisplayMetrics().density < 2 ? (int) getResources().getDisplayMetrics().density : 2;
+    }
+
 
     void setViews(){
         currentCard = (Button) lnCardPlain.getChildAt(mActiveItemIndex);

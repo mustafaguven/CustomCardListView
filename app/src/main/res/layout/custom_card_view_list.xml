@@ -53,6 +53,69 @@
                 android:orientation="horizontal">
             </Button>
 
+            <Button
+                android:id="@+id/imgRes_5"
+                android:layout_width="200dip"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dip"
+                android:background="@color/red"
+                android:orientation="horizontal">
+            </Button>
+
+            <Button
+                android:id="@+id/imgRes_7"
+                android:layout_width="200dip"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dip"
+                android:background="@color/red"
+                android:orientation="horizontal">
+            </Button>
+
+            <Button
+                android:id="@+id/imgRes_6"
+                android:layout_width="200dip"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dip"
+                android:background="@color/red"
+                android:orientation="horizontal">
+            </Button>
+
+            <Button
+                android:id="@+id/imgRes_8"
+                android:layout_width="200dip"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dip"
+                android:background="@color/red"
+                android:orientation="horizontal">
+            </Button>
+
+            <Button
+                android:id="@+id/imgRes_9"
+                android:layout_width="200dip"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dip"
+                android:background="@color/red"
+                android:orientation="horizontal">
+            </Button>
+
+            <Button
+                android:id="@+id/imgRes_11"
+                android:layout_width="200dip"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dip"
+                android:background="@color/red"
+                android:orientation="horizontal">
+            </Button>
+
+            <Button
+                android:id="@+id/imgRes_12"
+                android:layout_width="200dip"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dip"
+                android:background="@color/red"
+                android:orientation="horizontal">
+            </Button>
+
             <!--<ImageView android:id="@+id/imgRes_1"
                 android:src="@drawable/res_1"
                 android:layout_width="match_parent"
