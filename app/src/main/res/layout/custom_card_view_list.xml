@@ -15,7 +15,45 @@
             android:orientation="horizontal"
             android:background="@color/grey">
 
-            <ImageView android:id="@+id/imgRes_1"
+
+
+            <Button
+                android:id="@+id/imgRes_2"
+                android:layout_width="200dip"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dip"
+                android:background="@color/red"
+                android:orientation="horizontal">
+            </Button>
+
+            <Button
+                android:id="@+id/imgRes_1"
+                android:layout_width="200dip"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dip"
+                android:background="@color/blue"
+                android:orientation="horizontal">
+            </Button>
+
+            <Button
+                android:id="@+id/imgRes_3"
+                android:layout_width="200dip"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dip"
+                android:background="@color/green"
+                android:orientation="horizontal">
+            </Button>
+
+            <Button
+                android:id="@+id/imgRes_4"
+                android:layout_width="200dip"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dip"
+                android:background="@color/red"
+                android:orientation="horizontal">
+            </Button>
+
+            <!--<ImageView android:id="@+id/imgRes_1"
                 android:src="@drawable/res_1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -29,7 +67,7 @@
                 android:layout_height="match_parent"
                 android:paddingLeft="10dip"
                 android:layout_toRightOf="@id/imgRes_1">
-            </ImageView><!---->
+            </ImageView>&lt;!&ndash;&ndash;&gt;
 
             <ImageView android:id="@+id/imgRes_3"
                 android:src="@drawable/res_1"
@@ -85,7 +123,7 @@
                 android:layout_height="match_parent"
                 android:paddingLeft="10dip"
                 android:layout_toRightOf="@id/imgRes_8">
-            </ImageView>
+            </ImageView>-->
         </LinearLayout>
 
 

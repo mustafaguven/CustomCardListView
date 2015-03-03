@@ -7,7 +7,7 @@
 
     <com.example.mustafaguven.scrollableview.customviews.CustomCardViewList
         android:id="@+id/customHorizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="200dip">
     </com.example.mustafaguven.scrollableview.customviews.CustomCardViewList>
 
