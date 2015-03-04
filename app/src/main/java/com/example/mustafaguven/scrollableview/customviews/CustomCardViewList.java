@@ -13,9 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.mustafaguven.scrollableview.R;
@@ -31,39 +29,59 @@ public class CustomCardViewList extends HorizontalScrollView {
     private final int DURATION = 250;
     private final float MIN_ALPHA = 50f;
     private final float MAX_ALPHA = 255f;
+    private final float MIN_SCALE = 0.75f;
+    private final float MAX_SCALE = 1f;
+    private final double SINGLE_TAP_DURATION = 500;
+
     private int mActiveItemIndex = 0;
-    private float MIN_SCALE = 0.75f;
-    private float MAX_SCALE = 1f;
     private int mMargin;
     private LinearLayout lnCardPlain;
     private boolean mIsFling;
+    private int mLastShownIndex;
+    private long mFirstClickTime = 0;
 
-    View previousCard, currentCard, nextCard;
+    private View previousCard, currentCard, nextCard;
 
     /*
     ******* Listeners ************************************************
     */
     private OnEndScrollListener mOnEndScrollListener;
     private OnSelectedItemListener mOnSelectedItemListener;
+    private OnClickedItemListener mOnClickedItemListener;
+
+
+    public interface OnEndScrollListener {
+        public void onEndScroll();
+    }
 
     public interface OnSelectedItemListener{
         public void onSelectedItem(View v, int position);
     }
 
-    public interface OnEndScrollListener {
-        public void onEndScroll();
+    public interface OnClickedItemListener{
+        public void onClickedItem(View v, int position);
     }
     // ***************************************************************
-
-
-
 
     public CustomCardViewList(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
     }
 
-    private void init() {
+    public CustomCardViewList(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public CustomCardViewList(Context context) {
+        super(context);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public CustomCardViewList(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+    public void setItems(ArrayList<View> views) {
         mMargin = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
         setVerticalScrollBarEnabled(false);
         setHorizontalScrollBarEnabled(false);
@@ -71,6 +89,10 @@ public class CustomCardViewList extends HorizontalScrollView {
         LayoutInflater layoutInflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         layoutInflater.inflate(R.layout.custom_card_view_list, this);
         lnCardPlain = (LinearLayout) findViewById(R.id.lnCardPlain);
+
+        for (View v : views) {
+            lnCardPlain.addView(v);
+        }
 
         this.getViewTreeObserver().
                 addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -81,29 +103,11 @@ public class CustomCardViewList extends HorizontalScrollView {
                         } else {
                             getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         }
-
+                        lnCardPlain.setMinimumWidth(getWidth());
                         findActiveItem();
                         scrollIt();
                     }
                 });
-    }
-
-
-
-
-    public CustomCardViewList(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
-
-    public CustomCardViewList(Context context) {
-        super(context);
-        init();
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public CustomCardViewList(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
     }
 
     private void playCurrentViewAnimator(float quotient, int alpha){
@@ -146,9 +150,8 @@ public class CustomCardViewList extends HorizontalScrollView {
     }
 
     private void scrollIt() {
-        Log.e("", "girdi");
         if(currentCard !=null) {
-            if(mOnSelectedItemListener!=null){
+            if(mOnSelectedItemListener!=null && mLastShownIndex!=mActiveItemIndex){
                 mOnSelectedItemListener.onSelectedItem(currentCard, mActiveItemIndex);
             }
             playCurrentViewAnimator(MAX_SCALE, (int) MAX_ALPHA);
@@ -158,6 +161,7 @@ public class CustomCardViewList extends HorizontalScrollView {
             if (nextCard != null) {
                 playNextViewAnimator(nextCard, MIN_SCALE, (int) MIN_ALPHA);
             }
+            mLastShownIndex = mActiveItemIndex;
         }
     }
 
@@ -188,25 +192,29 @@ public class CustomCardViewList extends HorizontalScrollView {
 
     private void findActiveItem() {
         setViews();
-        double viewWidth = currentCard.getWidth()/2;
-        double sonuc = (getScrollX() - viewWidth) / (2*viewWidth);
-        mActiveItemIndex = (int)Math.ceil(sonuc);
-        Log.e("", String.format("%s %s %s %s", getScrollX(), sonuc, viewWidth, mActiveItemIndex));
+        if(currentCard!=null) {
+            double halfViewWidth = getViewWidth() / 2;
+            double sonuc = (getScrollX() - halfViewWidth) / (getViewWidth());
+            mActiveItemIndex = (int) Math.ceil(sonuc);
+            Log.e("", String.format("%s %s %s %s", getScrollX(), sonuc, halfViewWidth, mActiveItemIndex));
+        }
     }
 
-    int getViewWidth(){
-        return getMeasuredWidth() - (mMargin * 8 / getDensity());
+    private int getTotalPadding(){
+        return (mMargin * 8 / getDensity());
     }
 
-    int getDensity(){
+    private int getViewWidth(){
+        return getMeasuredWidth() - getTotalPadding();
+    }
+
+    private int getDensity(){
         return (int) getResources().getDisplayMetrics().density < 2 ? (int) getResources().getDisplayMetrics().density : 2;
     }
 
-    void setViews(){
+    private void setViews(){
         currentCard = lnCardPlain.getChildAt(mActiveItemIndex);
         if(currentCard != null) {
-
-
             previousCard = null;
             if (mActiveItemIndex > 0) {
                 previousCard = lnCardPlain.getChildAt(mActiveItemIndex - 1);
@@ -218,11 +226,12 @@ public class CustomCardViewList extends HorizontalScrollView {
         }
     }
 
-    void setWidthForCard(View... views){
+    private void setWidthForCard(View... views){
         for (View v : views) {
             if(v!=null) {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(v.getLayoutParams());
                 params.width = getViewWidth();
+                params.height = getMeasuredHeight() - mMargin*2;
                 params.setMargins(0, mMargin, 0, mMargin);
                 params.gravity = Gravity.CENTER;
                 v.setLayoutParams(params);
@@ -248,6 +257,7 @@ public class CustomCardViewList extends HorizontalScrollView {
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(lastItem.getLayoutParams());
                     //below line should be put otherwise last item can not be selectable by the operator
                     params.width = getViewWidth() + 1;
+                    params.height = getMeasuredHeight() - mMargin*2;
                     params.setMargins(0, mMargin, (getMeasuredWidth() - params.width) / 2, mMargin);
                     params.gravity = Gravity.CENTER;
                     lastItem.setLayoutParams(params);
@@ -256,12 +266,32 @@ public class CustomCardViewList extends HorizontalScrollView {
         }
     }
 
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        int leftPaddingThreshold = getTotalPadding()/2;
+        int rightPaddingThreshold = getMeasuredWidth() - (getTotalPadding()/2);
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            mFirstClickTime = System.currentTimeMillis();
+        }
+        if (ev.getAction() == MotionEvent.ACTION_UP) {
+            if (System.currentTimeMillis() - mFirstClickTime < SINGLE_TAP_DURATION) {
+                if(ev.getX() >= leftPaddingThreshold && ev.getX() <= rightPaddingThreshold) {
+                    if (mOnClickedItemListener != null && lnCardPlain.getChildCount() > 0 && currentCard != null) {
+                        mOnClickedItemListener.onClickedItem(currentCard, mActiveItemIndex);
+                    }
+                }
+            }
+        }
+        return super.onInterceptTouchEvent(ev);
+    }
+
     OnTouchListener touchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
+
             switch (event.getAction()){
-                case  MotionEvent.ACTION_UP:
-                case  MotionEvent.ACTION_CANCEL:
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
                     findActiveItem();
                     scrollIt();
                     return true;
@@ -287,34 +317,12 @@ public class CustomCardViewList extends HorizontalScrollView {
         this.mOnSelectedItemListener = onSelectedItemListener;
     }
 
+    public OnClickedItemListener getOnClickedItemListener() {
+        return mOnClickedItemListener;
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public void setScrollView(ArrayList items){
-
-        //LinearLayout internalWrapper = new LinearLayout(getContext());
-        //internalWrapper.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        //internalWrapper.setOrientation(LinearLayout.HORIZONTAL);
-        //addView(internalWrapper);
-       /* this.mItems = items;
-        for(int i = 0; i< items.size();i++){
-            LinearLayout featureLayout = (LinearLayout) View.inflate(this.getContext(), R.layout.homefeature, null);
-
-            internalWrapper.addView(featureLayout);
-        }*/
+    public void setOnClickedItemListener (OnClickedItemListener onClickedItemListener) {
+        this.mOnClickedItemListener = onClickedItemListener;
     }
 }
 
