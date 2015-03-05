@@ -39,7 +39,7 @@ public class MainActivity extends ActionBarActivity {
 
     ArrayList<View> getViews(){
         ArrayList<View> views = new ArrayList<>();
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 10; i++) {
 
             TextView a = new TextView(this);
             a.setBackgroundColor(Color.RED);

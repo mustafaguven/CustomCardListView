@@ -12,6 +12,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -86,11 +87,20 @@ public class CustomCardViewList extends HorizontalScrollView {
         setVerticalScrollBarEnabled(false);
         setHorizontalScrollBarEnabled(false);
         setOnTouchListener(touchListener);
-        LayoutInflater layoutInflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        layoutInflater.inflate(R.layout.custom_card_view_list, this);
-        lnCardPlain = (LinearLayout) findViewById(R.id.lnCardPlain);
+        lnCardPlain = new LinearLayout(getContext());
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        lnCardPlain.setLayoutParams(params);
+        this.addView(lnCardPlain);
 
         for (View v : views) {
+            v.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mOnClickedItemListener != null && currentCard == v) {
+                        mOnClickedItemListener.onClickedItem(currentCard, mActiveItemIndex);
+                    } 
+                }
+            });
             lnCardPlain.addView(v);
         }
 
@@ -264,25 +274,6 @@ public class CustomCardViewList extends HorizontalScrollView {
                 }
             }
         }
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        int leftPaddingThreshold = getTotalPadding()/2;
-        int rightPaddingThreshold = getMeasuredWidth() - (getTotalPadding()/2);
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            mFirstClickTime = System.currentTimeMillis();
-        }
-        if (ev.getAction() == MotionEvent.ACTION_UP) {
-            if (System.currentTimeMillis() - mFirstClickTime < SINGLE_TAP_DURATION) {
-                if(ev.getX() >= leftPaddingThreshold && ev.getX() <= rightPaddingThreshold) {
-                    if (mOnClickedItemListener != null && lnCardPlain.getChildCount() > 0 && currentCard != null) {
-                        mOnClickedItemListener.onClickedItem(currentCard, mActiveItemIndex);
-                    }
-                }
-            }
-        }
-        return super.onInterceptTouchEvent(ev);
     }
 
     OnTouchListener touchListener = new View.OnTouchListener() {
