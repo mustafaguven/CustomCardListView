@@ -98,7 +98,7 @@ public class CustomCardViewList extends HorizontalScrollView {
                 public void onClick(View v) {
                     if (mOnClickedItemListener != null && currentCard == v) {
                         mOnClickedItemListener.onClickedItem(currentCard, mActiveItemIndex);
-                    } 
+                    }
                 }
             });
             lnCardPlain.addView(v);
