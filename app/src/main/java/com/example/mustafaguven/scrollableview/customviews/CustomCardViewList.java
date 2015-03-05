@@ -32,14 +32,12 @@ public class CustomCardViewList extends HorizontalScrollView {
     private final float MAX_ALPHA = 255f;
     private final float MIN_SCALE = 0.75f;
     private final float MAX_SCALE = 1f;
-    private final double SINGLE_TAP_DURATION = 500;
 
     private int mActiveItemIndex = 0;
     private int mMargin;
     private LinearLayout lnCardPlain;
     private boolean mIsFling;
     private int mLastShownIndex;
-    private long mFirstClickTime = 0;
 
     private View previousCard, currentCard, nextCard;
 
