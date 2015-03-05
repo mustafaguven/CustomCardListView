@@ -201,10 +201,10 @@ public class CustomCardViewList extends HorizontalScrollView {
     private void findActiveItem() {
         setViews();
         if(currentCard!=null) {
-            double halfViewWidth = (getViewWidth() - mMargin) / 2;
-            double sonuc = (getScrollX() - halfViewWidth) / (getViewWidth());
+            double halfViewWidth = (getViewWidth() / 2) ;
+            double sonuc = ((getScrollX()+(mMargin*mActiveItemIndex))  - halfViewWidth) / (getViewWidth());
             mActiveItemIndex = (int) Math.ceil(sonuc);
-            //Log.e("", String.format("%s %s %s %s", getScrollX(), sonuc, halfViewWidth, mActiveItemIndex));
+            //Log.e("", String.format("%s %s %s %s %s", getScrollX(), sonuc, halfViewWidth, mActiveItemIndex, mMargin));
         }
     }
 

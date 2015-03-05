@@ -44,7 +44,7 @@ public class MainActivity extends ActionBarActivity {
 
     ArrayList<View> getViews(){
         ArrayList<View> views = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 150; i++) {
 
             RoundedCard r = new RoundedCard(this);
             /*TextView a = new TextView(this);
