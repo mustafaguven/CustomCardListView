@@ -206,7 +206,7 @@ public class CustomCardViewList extends HorizontalScrollView {
             double halfViewWidth = getViewWidth() / 2;
             double sonuc = (getScrollX() - halfViewWidth) / (getViewWidth());
             mActiveItemIndex = (int) Math.ceil(sonuc);
-            Log.e("", String.format("%s %s %s %s", getScrollX(), sonuc, halfViewWidth, mActiveItemIndex));
+            //Log.e("", String.format("%s %s %s %s", getScrollX(), sonuc, halfViewWidth, mActiveItemIndex));
         }
     }
 

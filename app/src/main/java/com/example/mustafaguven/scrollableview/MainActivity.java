@@ -3,6 +3,8 @@ package com.example.mustafaguven.scrollableview;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,14 +26,16 @@ public class MainActivity extends ActionBarActivity {
         c.setOnSelectedItemListener(new CustomCardViewList.OnSelectedItemListener() {
             @Override
             public void onSelectedItem(View v, int position) {
-                Toast.makeText(MainActivity.this, String.format("Scrolled... Position: %s, View: %s", position, v), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, String.format("Scrolled... Position: %s, View: %s", position, v), Toast.LENGTH_SHORT).show();
+                Log.e("CustomCardViewList", String.format("Scrolled... Position: %s, View: %s", position, v));
             }
         });
 
         c.setOnClickedItemListener(new CustomCardViewList.OnClickedItemListener() {
             @Override
             public void onClickedItem(View v, int position) {
-                Toast.makeText(MainActivity.this, String.format("Clicked... Position: %s, View: %s", position, v), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, String.format("Clicked... Position: %s, View: %s", position, v), Toast.LENGTH_SHORT).show();
+                Log.e("CustomCardViewList", String.format("Clicked... Position: %s, View: %s", position, v));
             }
         });
         c.setItems(getViews());
@@ -43,7 +47,8 @@ public class MainActivity extends ActionBarActivity {
 
             TextView a = new TextView(this);
             a.setBackgroundColor(Color.RED);
-            a.setTextSize(30);
+            a.setTextSize(50);
+            a.setGravity(Gravity.CENTER);
             a.setText(String.valueOf(i));
             views.add(a);
         }

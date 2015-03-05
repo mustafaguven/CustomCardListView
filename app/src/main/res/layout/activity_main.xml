@@ -9,7 +9,7 @@
         android:id="@+id/myCustomCardViewList"
         android:layout_width="match_parent"
         android:layout_height="200dip"
-        android:background="@color/green">
+        android:background="@color/blue">
     </com.example.mustafaguven.scrollableview.customviews.CustomCardViewList>
 
 </RelativeLayout>
