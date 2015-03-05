@@ -8,8 +8,8 @@
     <com.example.mustafaguven.scrollableview.customviews.CustomCardViewList
         android:id="@+id/myCustomCardViewList"
         android:layout_width="match_parent"
-        android:layout_height="200dip"
-        android:background="@color/blue">
+        android:layout_height="200dp"
+        android:background="#EAECEC">
     </com.example.mustafaguven.scrollableview.customviews.CustomCardViewList>
 
 </RelativeLayout>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/rounded_card_background_shape"
+    android:paddingRight="12dp"
+    android:paddingLeft="12dp"
+    android:paddingTop="8dp">
+    <Button
+        android:layout_width="42dip"
+        android:layout_height="42dip"
+        android:background="@color/green"/>
+
+
+
+</RelativeLayout>

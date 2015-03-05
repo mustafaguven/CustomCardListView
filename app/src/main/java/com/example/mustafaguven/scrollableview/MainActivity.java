@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mustafaguven.scrollableview.customviews.CustomCardViewList;
+import com.example.mustafaguven.scrollableview.customviews.RoundedCard;
 
 import java.util.ArrayList;
 
@@ -45,12 +46,14 @@ public class MainActivity extends ActionBarActivity {
         ArrayList<View> views = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
 
-            TextView a = new TextView(this);
+            RoundedCard r = new RoundedCard(this);
+            /*TextView a = new TextView(this);
             a.setBackgroundColor(Color.RED);
             a.setTextSize(50);
             a.setGravity(Gravity.CENTER);
             a.setText(String.valueOf(i));
-            views.add(a);
+            views.add(a);*/
+            views.add(r);
         }
         return views;
     }

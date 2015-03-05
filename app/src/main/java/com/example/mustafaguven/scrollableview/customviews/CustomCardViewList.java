@@ -34,7 +34,7 @@ public class CustomCardViewList extends HorizontalScrollView {
     private final float MAX_SCALE = 1f;
 
     private int mActiveItemIndex = 0;
-    private int mMargin;
+    private int mMargin, mTopMargin;
     private LinearLayout lnCardPlain;
     private boolean mIsFling;
     private int mLastShownIndex;
@@ -47,7 +47,6 @@ public class CustomCardViewList extends HorizontalScrollView {
     private OnEndScrollListener mOnEndScrollListener;
     private OnSelectedItemListener mOnSelectedItemListener;
     private OnClickedItemListener mOnClickedItemListener;
-
 
     public interface OnEndScrollListener {
         public void onEndScroll();
@@ -81,7 +80,8 @@ public class CustomCardViewList extends HorizontalScrollView {
     }
 
     public void setItems(ArrayList<View> views) {
-        mMargin = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
+        mMargin = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
+        mTopMargin = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics());
         setVerticalScrollBarEnabled(false);
         setHorizontalScrollBarEnabled(false);
         setOnTouchListener(touchListener);
@@ -201,7 +201,7 @@ public class CustomCardViewList extends HorizontalScrollView {
     private void findActiveItem() {
         setViews();
         if(currentCard!=null) {
-            double halfViewWidth = getViewWidth() / 2;
+            double halfViewWidth = (getViewWidth() - mMargin) / 2;
             double sonuc = (getScrollX() - halfViewWidth) / (getViewWidth());
             mActiveItemIndex = (int) Math.ceil(sonuc);
             //Log.e("", String.format("%s %s %s %s", getScrollX(), sonuc, halfViewWidth, mActiveItemIndex));
@@ -239,8 +239,8 @@ public class CustomCardViewList extends HorizontalScrollView {
             if(v!=null) {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(v.getLayoutParams());
                 params.width = getViewWidth();
-                params.height = getMeasuredHeight() - mMargin*2;
-                params.setMargins(0, mMargin, 0, mMargin);
+                params.height = getMeasuredHeight() - mTopMargin*2;
+                params.setMargins(-mMargin, mTopMargin, 0, mTopMargin);
                 params.gravity = Gravity.CENTER;
                 v.setLayoutParams(params);
             }
@@ -253,7 +253,7 @@ public class CustomCardViewList extends HorizontalScrollView {
             View firstItem = lnCardPlain.getChildAt(0);
             if (firstItem != null) {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(firstItem.getLayoutParams());
-                params.setMargins((getMeasuredWidth() - params.width) / 2, mMargin, 0, mMargin);
+                params.setMargins((getMeasuredWidth() - params.width) / 2, mTopMargin, 0, mTopMargin);
                 params.gravity = Gravity.CENTER;
                 firstItem.setLayoutParams(params);
             }
@@ -265,8 +265,8 @@ public class CustomCardViewList extends HorizontalScrollView {
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(lastItem.getLayoutParams());
                     //below line should be put otherwise last item can not be selectable by the operator
                     params.width = getViewWidth() + 1;
-                    params.height = getMeasuredHeight() - mMargin*2;
-                    params.setMargins(0, mMargin, (getMeasuredWidth() - params.width) / 2, mMargin);
+                    params.height = getMeasuredHeight() - mTopMargin*2;
+                    params.setMargins(0, mTopMargin, (getMeasuredWidth() - params.width) / 2, mTopMargin);
                     params.gravity = Gravity.CENTER;
                     lastItem.setLayoutParams(params);
                 }
