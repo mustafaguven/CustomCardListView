@@ -5,11 +5,92 @@
     android:background="@drawable/rounded_card_background_shape"
     android:paddingRight="12dp"
     android:paddingLeft="12dp"
-    android:paddingTop="8dp">
+    android:paddingTop="8dp"
+    android:alpha="110">
     <Button
+        android:id="@+id/imgUser"
         android:layout_width="42dip"
         android:layout_height="42dip"
-        android:background="@color/green"/>
+        android:background="@drawable/img"/>
+
+    <TextView
+        android:id="@+id/lblUserName"
+        android:text="Esin +2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@id/imgUser"/>
+
+    <ImageView
+        android:id="@+id/imgSeperator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#B4B4B4"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/imgUser"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imgSeperator"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:id="@+id/lnUst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.7"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/lblHome"
+                android:text="Ev"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"
+                android:textColor="#333D47"/>
+
+            <TextView
+                android:id="@+id/lblAddress"
+                android:text="FLORYA\nAtakent Mh."
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginTop="12dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnAlt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/lblDay"
+                android:text="Bugün"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#333D47"
+                android:layout_marginTop="12dp"/>
+
+            <TextView
+                android:id="@+id/lblHour"
+                android:text="19:30"
+                android:textColor="#FF5353"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="40sp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 

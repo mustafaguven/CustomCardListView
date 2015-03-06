@@ -6,18 +6,14 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-
-import com.example.mustafaguven.scrollableview.R;
 
 import java.util.ArrayList;
 
@@ -28,8 +24,8 @@ public class CustomCardViewList extends HorizontalScrollView {
 
     private final int THRESHOLD = 3;
     private final int DURATION = 250;
-    private final float MIN_ALPHA = 50f;
-    private final float MAX_ALPHA = 255f;
+    private final float MIN_ALPHA = 0.4f;
+    private final float MAX_ALPHA = 1f;
     private final float MIN_SCALE = 0.75f;
     private final float MAX_SCALE = 1f;
 
@@ -118,7 +114,7 @@ public class CustomCardViewList extends HorizontalScrollView {
                 });
     }
 
-    private void playCurrentViewAnimator(float quotient, int alpha){
+    private void playCurrentViewAnimator(float quotient){
         for (int i = 0; i < lnCardPlain.getChildCount(); i++) {
             if(i!=mActiveItemIndex) {
                 View view = lnCardPlain.getChildAt(i);
@@ -138,19 +134,19 @@ public class CustomCardViewList extends HorizontalScrollView {
         animScaleX.setDuration(DURATION);
         ObjectAnimator animScaleY=ObjectAnimator.ofFloat(currentCard, "scaleY", quotient);
         animScaleY.setDuration(DURATION);
-        ObjectAnimator animAlpha=ObjectAnimator.ofInt(currentCard, "imageAlpha", alpha);
+        ObjectAnimator animAlpha=ObjectAnimator.ofFloat(currentCard, "alpha", MIN_ALPHA, MAX_ALPHA);
         animAlpha.setDuration(DURATION);
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.play(animScrollX).with(animScaleX).with(animScaleY).with(animAlpha);
         animatorSet.start();
     }
 
-    private void playNextViewAnimator(View v, float quotient, int alpha){
+    private void playNextViewAnimator(View v, float quotient){
         ObjectAnimator animScaleX =ObjectAnimator.ofFloat(v, "scaleX", quotient);
         animScaleX.setDuration(DURATION);
         ObjectAnimator animScaleY=ObjectAnimator.ofFloat(v, "scaleY", quotient);
         animScaleY.setDuration(DURATION);
-        ObjectAnimator animAlpha=ObjectAnimator.ofInt(v, "imageAlpha", alpha);
+        ObjectAnimator animAlpha=ObjectAnimator.ofFloat(v, "alpha", MAX_ALPHA, MIN_ALPHA);
         animAlpha.setDuration(DURATION);
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.play(animAlpha).with(animScaleY).with(animScaleX);
@@ -162,12 +158,12 @@ public class CustomCardViewList extends HorizontalScrollView {
             if(mOnSelectedItemListener!=null && mLastShownIndex!=mActiveItemIndex){
                 mOnSelectedItemListener.onSelectedItem(currentCard, mActiveItemIndex);
             }
-            playCurrentViewAnimator(MAX_SCALE, (int) MAX_ALPHA);
+            playCurrentViewAnimator(MAX_SCALE);
             if (previousCard != null) {
-                playNextViewAnimator(previousCard, MIN_SCALE, (int) MIN_ALPHA);
+                playNextViewAnimator(previousCard, MIN_SCALE);
             }
             if (nextCard != null) {
-                playNextViewAnimator(nextCard, MIN_SCALE, (int) MIN_ALPHA);
+                playNextViewAnimator(nextCard, MIN_SCALE);
             }
             mLastShownIndex = mActiveItemIndex;
         }
@@ -202,8 +198,8 @@ public class CustomCardViewList extends HorizontalScrollView {
         setViews();
         if(currentCard!=null) {
             double halfViewWidth = (getViewWidth() / 2) ;
-            double sonuc = ((getScrollX()+(mMargin*mActiveItemIndex))  - halfViewWidth) / (getViewWidth());
-            mActiveItemIndex = (int) Math.ceil(sonuc);
+            double activeItemProportion = ((getScrollX()+(mMargin*mActiveItemIndex))  - halfViewWidth) / (getViewWidth());
+            mActiveItemIndex = (int) Math.ceil(activeItemProportion);
             //Log.e("", String.format("%s %s %s %s %s", getScrollX(), sonuc, halfViewWidth, mActiveItemIndex, mMargin));
         }
     }
@@ -266,7 +262,7 @@ public class CustomCardViewList extends HorizontalScrollView {
                     //below line should be put otherwise last item can not be selectable by the operator
                     params.width = getViewWidth() + 1;
                     params.height = getMeasuredHeight() - mTopMargin*2;
-                    params.setMargins(0, mTopMargin, (getMeasuredWidth() - params.width) / 2, mTopMargin);
+                    params.setMargins(-mMargin, mTopMargin, (getMeasuredWidth() - params.width) / 2, mTopMargin);
                     params.gravity = Gravity.CENTER;
                     lastItem.setLayoutParams(params);
                 }
