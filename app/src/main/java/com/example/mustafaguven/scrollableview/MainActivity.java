@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.mustafaguven.scrollableview.customviews.CustomCardViewList;
 import com.example.mustafaguven.scrollableview.customviews.RoundedCard;
+import com.example.mustafaguven.scrollableview.customviews.VerticalCardViewList;
 
 import java.util.ArrayList;
 
@@ -23,6 +24,16 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SampleForCustomCardViewList();
+        VerticalCardViewList v = (VerticalCardViewList) findViewById(R.id.myVerticalCardViewList);
+        v.setItems();
+
+    }
+
+
+
+    private void SampleForCustomCardViewList(){
         CustomCardViewList c = (CustomCardViewList)findViewById(R.id.myCustomCardViewList);
         c.setOnSelectedItemListener(new CustomCardViewList.OnSelectedItemListener() {
             @Override
@@ -57,7 +68,6 @@ public class MainActivity extends ActionBarActivity {
         }
         return views;
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
