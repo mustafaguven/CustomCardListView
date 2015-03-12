@@ -8,76 +8,76 @@
         android:layout_height="200dp"
         android:minHeight="200dp">
 
-        <FrameLayout
+     <!-- <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:minHeight="200dp"
-            >
-
-            <TextView android:id="@+id/card_5"
-                android:layout_marginTop="6dp"
-                android:layout_width="260dp"
-                android:layout_height="150dp"
-                android:background="@drawable/rounded_message_card_background_shape"
-                android:layout_gravity="top|center"
-                android:textSize="40sp"
-                android:text="4"
-                android:gravity="center"
-                >
-            </TextView>
-
-
-            <TextView android:id="@+id/card_4"
-                android:layout_marginTop="12dp"
-                android:layout_width="270dp"
-                android:layout_height="150dp"
-                android:background="@drawable/rounded_message_card_background_shape"
-                android:layout_gravity="top|center"
-                android:textSize="40sp"
-                android:text="4"
-                android:gravity="center"
-                >
-            </TextView>
-
-          <TextView android:id="@+id/card_3"
-                android:layout_marginTop="18dp"
-                android:layout_width="280dp"
-                android:layout_height="150dp"
-                android:background="@drawable/rounded_message_card_background_shape"
-                android:layout_gravity="top|center"
-                android:textSize="40sp"
-                android:text="3"
-                android:gravity="center"
-                >
-            </TextView>
-
-            <TextView android:id="@+id/card_2"
-                android:layout_marginTop="24dp"
-                android:layout_width="290dp"
-                android:layout_height="150dp"
-                android:background="@drawable/rounded_message_card_background_shape"
-                android:layout_gravity="top|center"
-                android:textSize="40sp"
-                android:text="2"
-                android:gravity="center"
-                >
-            </TextView>
-
-            <TextView android:id="@+id/card_1"
-                android:layout_marginTop="30dp"
-                android:layout_width="300dp"
-                android:layout_height="150dp"
-                android:background="@drawable/rounded_message_card_background_shape"
-                android:layout_gravity="top|center"
-                android:textSize="40sp"
-                android:text="1"
-                android:gravity="center"
-                >
-            </TextView>
+          android:background="@color/red"
+            >-->
+        <!--
+                  <TextView android:id="@+id/card_5"
+                      android:layout_marginTop="6dp"
+                      android:layout_width="260dp"
+                      android:layout_height="150dp"
+                      android:background="@drawable/rounded_message_card_background_shape"
+                      android:layout_gravity="top|center"
+                      android:textSize="40sp"
+                      android:text="4"
+                      android:gravity="center"
+                      >
+                  </TextView>
 
 
-        </FrameLayout>
+                  <TextView android:id="@+id/card_4"
+                      android:layout_marginTop="12dp"
+                      android:layout_width="270dp"
+                      android:layout_height="150dp"
+                      android:background="@drawable/rounded_message_card_background_shape"
+                      android:layout_gravity="top|center"
+                      android:textSize="40sp"
+                      android:text="4"
+                      android:gravity="center"
+                      >
+                  </TextView>
+
+                <TextView android:id="@+id/card_3"
+                      android:layout_marginTop="18dp"
+                      android:layout_width="280dp"
+                      android:layout_height="150dp"
+                      android:background="@drawable/rounded_message_card_background_shape"
+                      android:layout_gravity="top|center"
+                      android:textSize="40sp"
+                      android:text="3"
+                      android:gravity="center"
+                      >
+                  </TextView>
+
+                  <TextView android:id="@+id/card_2"
+                      android:layout_marginTop="24dp"
+                      android:layout_width="290dp"
+                      android:layout_height="150dp"
+                      android:background="@drawable/rounded_message_card_background_shape"
+                      android:layout_gravity="top|center"
+                      android:textSize="40sp"
+                      android:text="2"
+                      android:gravity="center"
+                      >
+                  </TextView>
+
+                  <TextView android:id="@+id/card_1"
+                      android:layout_marginTop="30dp"
+                      android:layout_width="300dp"
+                      android:layout_height="150dp"
+                      android:background="@drawable/rounded_message_card_background_shape"
+                      android:layout_gravity="top|center"
+                      android:textSize="40sp"
+                      android:text="1"
+                      android:gravity="center"
+                      >
+                  </TextView>
+      -->
+
+         <!--     </FrameLayout>-->
     </ScrollView>
 
 

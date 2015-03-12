@@ -83,7 +83,7 @@ public class CustomCardViewList extends HorizontalScrollView {
         setOnTouchListener(touchListener);
         lnCardPlain = new LinearLayout(getContext());
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        lnCardPlain.setLayoutParams(params); 
+        lnCardPlain.setLayoutParams(params);
         this.addView(lnCardPlain);
 
         for (View v : views) {

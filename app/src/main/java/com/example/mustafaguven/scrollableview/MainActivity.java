@@ -16,6 +16,7 @@ import com.example.mustafaguven.scrollableview.customviews.RoundedCard;
 import com.example.mustafaguven.scrollableview.customviews.VerticalCardViewList;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -27,8 +28,14 @@ public class MainActivity extends ActionBarActivity {
 
         SampleForCustomCardViewList();
         VerticalCardViewList v = (VerticalCardViewList) findViewById(R.id.myVerticalCardViewList);
-        v.setItems();
 
+        List<View> views = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            TextView t = new TextView(this);
+            t.setText(String.valueOf(i));
+            views.add(t);
+        }
+        v.setItems(views);
     }
 
 

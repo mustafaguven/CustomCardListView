@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ScrollableView.iml" filepath="$PROJECT_DIR$/ScrollableView.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CustomCardListView.iml" filepath="$PROJECT_DIR$/CustomCardListView.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
