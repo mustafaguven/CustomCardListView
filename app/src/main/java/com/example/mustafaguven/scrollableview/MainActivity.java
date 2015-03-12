@@ -30,7 +30,7 @@ public class MainActivity extends ActionBarActivity {
         VerticalCardViewList v = (VerticalCardViewList) findViewById(R.id.myVerticalCardViewList);
 
         List<View> views = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 23; i++) {
             TextView t = new TextView(this);
             t.setText(String.valueOf(i));
             views.add(t);
