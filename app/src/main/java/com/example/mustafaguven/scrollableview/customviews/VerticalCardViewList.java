@@ -31,7 +31,7 @@ public class VerticalCardViewList extends ScrollView {
     private static final int THRESHOLD_FOR_VISIBLE_RECORD = 6;
 
     private FrameLayout flPlain;
-    private final int MARGIN = 50; //dp
+    private int mMargin;
     private List<View> mViews;
 
 
@@ -58,17 +58,18 @@ public class VerticalCardViewList extends ScrollView {
 
     public void setItems(final List<View> views) {
         //LayoutInflater.from(getContext()).inflate(R.layout.vertical_test, this);
+        mMargin = convertDpToPixel(20);
         setVerticalScrollBarEnabled(false);
         setHorizontalScrollBarEnabled(false);
         this.mViews = views;
         flPlain = new FrameLayout(getContext());
         FrameLayout.LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-        
+
         flPlain.setLayoutParams(params);
         flPlain.setBackgroundColor(Color.RED);
 
-        this.setOnTouchListener(touchListener);
-        fillItems();
+
+
 
         this.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -78,6 +79,7 @@ public class VerticalCardViewList extends ScrollView {
                 } else {
                     getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
+                fillItems();
                 flPlain.setMinimumHeight(convertDpToPixel(FLPLAIN_MIN_HEIGHT));
             }
         });
@@ -90,11 +92,13 @@ public class VerticalCardViewList extends ScrollView {
             TextView v = (TextView)mViews.get(i);
             v.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.rounded_message_card_background_shape));
             LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            params.width = getNormalCardWidth() - (i * convertDpToPixel(CARD_WIDTH_SPACE));
+            params.width = getViewWidth() - (i * convertDpToPixel(CARD_WIDTH_SPACE));
             params.height = convertDpToPixel(CARD_HEIGHT);
             params.gravity = Gravity.CENTER;
             params.setMargins(0, getCardMargin(i), 0, 0);
             v.setLayoutParams(params);
+            v.setClickable(true);
+            v.setOnTouchListener(touchListener);
             flPlain.addView(v);
         }
     }
@@ -105,7 +109,6 @@ public class VerticalCardViewList extends ScrollView {
             switch (event.getAction()){
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
-
                     Log.e("touchListener", String.format("%s %s %s", event.getX(), event.getY(), v));
                     return true;
                 default:
@@ -114,10 +117,18 @@ public class VerticalCardViewList extends ScrollView {
         }
     };
 
-    private int getNormalCardWidth() {
-        return 1200;
+
+    private int getTotalPadding(){
+        return (mMargin * 8 / getDensity());
     }
 
+    private int getViewWidth(){
+        return getMeasuredWidth() - getTotalPadding();
+    }
+
+    private int getDensity(){
+        return (int) getResources().getDisplayMetrics().density < 2 ? (int) getResources().getDisplayMetrics().density : 2;
+    }
 
     private int getUsableSize(){
         return mViews.size() <= THRESHOLD_FOR_VISIBLE_RECORD ? mViews.size() : THRESHOLD_FOR_VISIBLE_RECORD;
@@ -127,7 +138,7 @@ public class VerticalCardViewList extends ScrollView {
 
     private int getCardMargin(int index) {
        index++;
-        return (MARGIN * (getUsableSize() - index) / getUsableSize());
+       return (mMargin * (getUsableSize() - index) / getUsableSize());
 
     }
 }
