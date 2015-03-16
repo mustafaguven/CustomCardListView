@@ -38,8 +38,6 @@ public class MainActivity extends ActionBarActivity {
         v.setItems(views);
     }
 
-
-
     private void SampleForCustomCardViewList(){
         CustomCardViewList c = (CustomCardViewList)findViewById(R.id.myCustomCardViewList);
         c.setOnSelectedItemListener(new CustomCardViewList.OnSelectedItemListener() {

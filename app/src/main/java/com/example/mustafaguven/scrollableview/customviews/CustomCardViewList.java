@@ -205,15 +205,11 @@ public class CustomCardViewList extends HorizontalScrollView {
     }
 
     private int getTotalPadding(){
-        return (mMargin * 8 / getDensity());
+        return getMeasuredHeight() / 2;
     }
 
     private int getViewWidth(){
         return getMeasuredWidth() - getTotalPadding();
-    }
-
-    private int getDensity(){
-        return (int) getResources().getDisplayMetrics().density < 2 ? (int) getResources().getDisplayMetrics().density : 2;
     }
 
     private void setViews(){
