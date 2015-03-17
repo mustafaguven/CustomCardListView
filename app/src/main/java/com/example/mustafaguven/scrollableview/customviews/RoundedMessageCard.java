@@ -5,8 +5,6 @@ import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -15,30 +13,36 @@ import com.example.mustafaguven.scrollableview.R;
 /**
  * Created by MustafaGuven on 5.3.2015.
  */
-public class RoundedCard extends RelativeLayout {
+public class RoundedMessageCard extends RelativeLayout {
 
-    public RoundedCard(Context context) {
+    public RoundedMessageCard(Context context) {
         super(context);
         init();
     }
 
-    public RoundedCard(Context context, AttributeSet attrs) {
+    public RoundedMessageCard(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public RoundedCard(Context context, AttributeSet attrs, int defStyleAttr) {
+    public RoundedMessageCard(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public RoundedCard(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public RoundedMessageCard(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
 
     private void init() {
-        LayoutInflater.from(getContext()).inflate(R.layout.rounded_card, this);
+        LayoutInflater.from(getContext()).inflate(R.layout.rounded_card_message, this);
     }
+
+    public void setTextName(String x){
+        TextView t = (TextView) findViewById(R.id.lblUserName);
+        t.setText(x);
+    }
+
 }

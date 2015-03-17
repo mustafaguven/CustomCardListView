@@ -15,7 +15,7 @@
         <com.example.mustafaguven.scrollableview.customviews.VerticalCardViewList
         android:id="@+id/myVerticalCardViewList"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="250dp"
         android:background="#EAECEC">
     </com.example.mustafaguven.scrollableview.customviews.VerticalCardViewList>
 

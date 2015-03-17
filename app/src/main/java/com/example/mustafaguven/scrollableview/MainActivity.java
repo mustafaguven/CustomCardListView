@@ -1,6 +1,5 @@
 package com.example.mustafaguven.scrollableview;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -9,10 +8,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mustafaguven.scrollableview.customviews.CustomCardViewList;
 import com.example.mustafaguven.scrollableview.customviews.RoundedCard;
+import com.example.mustafaguven.scrollableview.customviews.RoundedMessageCard;
 import com.example.mustafaguven.scrollableview.customviews.VerticalCardViewList;
 
 import java.util.ArrayList;
@@ -26,19 +25,34 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SampleForCustomCardViewList();
-        VerticalCardViewList v = (VerticalCardViewList) findViewById(R.id.myVerticalCardViewList);
+        sampleForCustomCardViewList();
+        sampleForVerticalCardViewList();
+    }
+
+    private void sampleForVerticalCardViewList() {
+        final VerticalCardViewList v = (VerticalCardViewList) findViewById(R.id.myVerticalCardViewList);
+        v.setOnEmpty(new VerticalCardViewList.OnEmptyListener() {
+            @Override
+            public void onEmpty() {
+                v.setVisibility(View.GONE);
+            }
+        });
 
         List<View> views = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            TextView t = new TextView(this);
+        for (int i = 0; i < 12; i++) {
+            /*TextView t = new TextView(this);
             t.setText(String.valueOf(i));
-            views.add(t);
+            t.setTextSize(30);
+            t.setGravity(Gravity.CENTER);
+            views.add(t);*/
+            RoundedMessageCard r = new RoundedMessageCard(this);
+            r.setTextName(String.format("%s nolu kart", i+1));
+            views.add(r);
         }
         v.setItems(views);
     }
 
-    private void SampleForCustomCardViewList(){
+    private void sampleForCustomCardViewList(){
         CustomCardViewList c = (CustomCardViewList)findViewById(R.id.myCustomCardViewList);
         c.setOnSelectedItemListener(new CustomCardViewList.OnSelectedItemListener() {
             @Override
@@ -61,14 +75,7 @@ public class MainActivity extends ActionBarActivity {
     ArrayList<View> getViews(){
         ArrayList<View> views = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-
             RoundedCard r = new RoundedCard(this);
-            /*TextView a = new TextView(this);
-            a.setBackgroundColor(Color.RED);
-            a.setTextSize(50);
-            a.setGravity(Gravity.CENTER);
-            a.setText(String.valueOf(i));
-            views.add(a);*/
             views.add(r);
         }
         return views;
