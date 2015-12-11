@@ -2,7 +2,6 @@ package com.example.mustafaguven.scrollableview;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,11 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.example.mustafaguven.scrollableview.customviews.CenterizedViewPagerAdapter;
 import com.example.mustafaguven.scrollableview.customviews.RecyclerCardViewList;
@@ -63,10 +60,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+/*
+        pager.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                Toast toast = Toast.makeText(
+                        getApplicationContext(),
+                        "pager touched",
+                        Toast.LENGTH_SHORT
+                );
+                toast.show();
 
+                return false;
+            }
+        });
+*/
 
         // Obtain MotionEvent object
-        long downTime = SystemClock.uptimeMillis();
+/*        long downTime = SystemClock.uptimeMillis();
         long eventTime = SystemClock.uptimeMillis() + 100;
         float x = 0.0f;
         float y = 0.0f;
@@ -75,29 +85,22 @@ public class MainActivity extends AppCompatActivity {
         MotionEvent motionEvent = MotionEvent.obtain(
                 downTime,
                 eventTime,
-                MotionEvent.ACTION_UP,
+                MotionEvent.ACTION_DOWN,
                 x,
                 y,
                 metaState
-        );
-// Dispatch touch event to view
-        addnew.dispatchTouchEvent(motionEvent);
+        );*/
+
+        //pager.dispatchTouchEvent(motionEvent);
 
 
-        addnew.setOnTouchListener(new View.OnTouchListener()
-        {
-            public boolean onTouch(View v, MotionEvent event)
-            {
-                Toast toast = Toast.makeText(
-                        getApplicationContext(),
-                        "View touched",
-                        Toast.LENGTH_SHORT
-                );
-                toast.show();
 
-                return true;
-            }
-        });
+        samplePager();
+
+        //pager.dispatchTouchEvent(motionEvent);
+
+
+
 
 
 
@@ -112,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
         //lblDuration.setDuration(3662);
 
-        samplePager();
+
 
         //sampleForRecyclerCardViewList();
 
@@ -124,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.addnew)
     void addNew() {
+
         RoundedCard r = new RoundedCard(this);
         CenterizedViewPagerAdapter adapter = (CenterizedViewPagerAdapter) pager.getAdapter();
         adapter.addView(r, pager);
@@ -132,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void samplePager() {
         List<View> views = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 2; i++) {
             //RoundedMessageCard r = new RoundedMessageCard(this);
             //r.setTextName(String.format("%s nolu kart", i + 1));
             RoundedCard r = new RoundedCard(this);
@@ -144,6 +148,9 @@ public class MainActivity extends AppCompatActivity {
         pager.setAdapter(adapter);
         pager.enableCenterLockOfChilds();
 
+
+
+        //pager.setCurrentItemInternal(0, true, true, 0);
 
         //pager.beginFakeDrag2();
 
@@ -159,12 +166,6 @@ public class MainActivity extends AppCompatActivity {
 
                 page.setScaleX(scaleFactor);
                 page.setScaleY(scaleFactor);
-       /*         page.setScaleX(page.getX());
-                page.setScaleY(page.getY());*/
-/*                page.setScaleX(normalizedposition);
-                page.setScaleY(normalizedposition);*/
-                //page.setScaleY(position * 2);
-
                 //page.setRotationY(position * -30); // animation style... change as you want..
             }
         });

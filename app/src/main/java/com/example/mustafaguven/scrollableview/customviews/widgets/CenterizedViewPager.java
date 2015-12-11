@@ -38,6 +38,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.ViewTreeObserver;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.Interpolator;
 import android.widget.Gallery;
@@ -380,6 +381,23 @@ public class CenterizedViewPager extends ViewGroup {
             ViewCompat.setImportantForAccessibility(this,
                     ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_YES);
         }
+
+        this.getViewTreeObserver().
+                addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                            getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                        } else {
+                            getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        }
+                        if(getChildCount()>0) {
+                            beginFakeDrag();
+                            fakeDragBy(0);
+                            endFakeDrag();
+                        }
+                    }
+                });
     }
 
     @Override
@@ -2096,7 +2114,7 @@ public class CenterizedViewPager extends ViewGroup {
 
 		/* adjust the left and right spaces for the first and last items.
         So that we can see the first and last items in center of the ViewPager like other views(center lock).*/
-        Log.d(TAG, "ssssssssssssssssss::mCenterLockEnabled:" + mCenterLockEnabled);
+        //Log.d(TAG, "ssssssssssssssssss::mCenterLockEnabled:" + mCenterLockEnabled);
         if (mCenterLockEnabled) {
             if (mCurItem == 0) {
                 leftBound -= getPageSpace();
@@ -2921,6 +2939,10 @@ public class CenterizedViewPager extends ViewGroup {
         return getWidth() * mPageSpace;
     }
 
+
+
+
+
     /**
      * @return the mMatchChildHeightToViewPager
      * @author sandeep
@@ -2938,5 +2960,6 @@ public class CenterizedViewPager extends ViewGroup {
     public void setmMatchChildHeightToViewPager(boolean mMatchChildHeightToViewPager) {
         this.mMatchChildHeightToViewPager = mMatchChildHeightToViewPager;
     }
+
 
 }
