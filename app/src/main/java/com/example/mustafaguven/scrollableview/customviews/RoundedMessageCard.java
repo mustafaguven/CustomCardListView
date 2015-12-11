@@ -37,11 +37,11 @@ public class RoundedMessageCard extends RelativeLayout {
     }
 
     private void init() {
-        LayoutInflater.from(getContext()).inflate(R.layout.rounded_card_message, this);
+        LayoutInflater.from(getContext()).inflate(R.layout.cardviewpagerlayout, this);
     }
 
     public void setTextName(String x){
-        TextView t = (TextView) findViewById(R.id.lblUserName);
+        TextView t = (TextView) findViewById(R.id.lblTest);
         t.setText(x);
     }
 

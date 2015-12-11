@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="durationTextView">
+        <attr name="showtype" format="enum">
+            <enum name="HourMinuteSecond" value="0"  />
+            <enum name="HourMinute" value="1" />
+            <enum name="MinuteOnly" value="2" />
+        </attr>
+
+        <attr name="durationtext" format="integer"/>
+    </declare-styleable>
+</resources>
