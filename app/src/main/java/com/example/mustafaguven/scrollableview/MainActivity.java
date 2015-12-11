@@ -1,6 +1,7 @@
 package com.example.mustafaguven.scrollableview;
 
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -22,6 +23,7 @@ import com.example.mustafaguven.scrollableview.customviews.widgets.CenterizedVie
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -33,12 +35,8 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.rlMain)
     RelativeLayout rlMain;
 
-
     @Bind(R.id.addnew)
     Button addnew;
-
-/*    @Bind(R.id.pager)
-    ViewPager pager;*/
 
  /*   @Bind(R.id.lblDuration)
     DurationTextView lblDuration;*/
@@ -53,85 +51,34 @@ public class MainActivity extends AppCompatActivity {
      */
 
 
-    int prevIndex = 0, oldWidth = 200, oldHeight = 200, newWidth = 300, newHeight = 300;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-/*
-        pager.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                Toast toast = Toast.makeText(
-                        getApplicationContext(),
-                        "pager touched",
-                        Toast.LENGTH_SHORT
-                );
-                toast.show();
-
-                return false;
-            }
-        });
-*/
-
-        // Obtain MotionEvent object
-/*        long downTime = SystemClock.uptimeMillis();
-        long eventTime = SystemClock.uptimeMillis() + 100;
-        float x = 0.0f;
-        float y = 0.0f;
-// List of meta states found here:     developer.android.com/reference/android/view/KeyEvent.html#getMetaState()
-        int metaState = 0;
-        MotionEvent motionEvent = MotionEvent.obtain(
-                downTime,
-                eventTime,
-                MotionEvent.ACTION_DOWN,
-                x,
-                y,
-                metaState
-        );*/
-
-        //pager.dispatchTouchEvent(motionEvent);
-
-
 
         samplePager();
 
-        //pager.dispatchTouchEvent(motionEvent);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         //lblDuration.setDuration(3662);
-
-
-
         //sampleForRecyclerCardViewList();
-
 /*        sampleForCustomCardViewList();
         sampleForVerticalCardViewList();*/
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
     }
 
     @OnClick(R.id.addnew)
     void addNew() {
-
         RoundedCard r = new RoundedCard(this);
+        r.findViewById(R.id.rnCard).setBackgroundColor(getRandomColor());
         CenterizedViewPagerAdapter adapter = (CenterizedViewPagerAdapter) pager.getAdapter();
         adapter.addView(r, pager);
 
+    }
+
+    @OnClick(R.id.remove)
+    void remove(){
+        CenterizedViewPagerAdapter adapter = (CenterizedViewPagerAdapter) pager.getAdapter();
+
+        adapter.removeView(3, pager);
     }
 
     private void samplePager() {
@@ -140,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
             //RoundedMessageCard r = new RoundedMessageCard(this);
             //r.setTextName(String.format("%s nolu kart", i + 1));
             RoundedCard r = new RoundedCard(this);
+            r.findViewById(R.id.rnCard).setBackgroundColor(getRandomColor());
             r.setTag(i);
             views.add(r);
         }
@@ -148,30 +96,11 @@ public class MainActivity extends AppCompatActivity {
         pager.setAdapter(adapter);
         pager.enableCenterLockOfChilds();
 
+    }
 
-
-        //pager.setCurrentItemInternal(0, true, true, 0);
-
-        //pager.beginFakeDrag2();
-
-
-
-
-        final float MIN_SCALE = 0.9f;
-        pager.setPageTransformer(false, new CenterizedViewPager.PageTransformer() {
-            @Override
-            public void transformPage(View page, float position) {
-                float scaleFactor = MIN_SCALE
-                        + (1 - MIN_SCALE) * (1 - Math.abs(position));
-
-                page.setScaleX(scaleFactor);
-                page.setScaleY(scaleFactor);
-                //page.setRotationY(position * -30); // animation style... change as you want..
-            }
-        });
-
-
-
+    private int getRandomColor() {
+        Random rnd = new Random();
+        return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
     }
 
 /*    private int convertPxToDp(int px) {

@@ -51,9 +51,34 @@ public class CenterizedViewPagerAdapter<T extends View> extends PagerAdapter {
     }
 
 
-    public void addView(T r, CenterizedViewPager pager) {
-        views.add(r);
+    public void addView(T view, CenterizedViewPager pager) {
+        views.add(view);
         notifyDataSetChanged();
         pager.setCurrentItem(getCount(), true);
     }
+
+    public void removeView(int index, CenterizedViewPager pager){
+        views.remove(index);
+
+        notifyDataSetChanged();
+        int position = getCount();
+        if(index < getCount() -1){
+            position = index;
+        }
+        pager.setCurrentItem(position, true);
+    }
+
+    public void removeView(T view, CenterizedViewPager pager){
+        int index = views.indexOf(view);
+        views.remove(view);
+        notifyDataSetChanged();
+        int position = getCount();
+        if(index < getCount() -1){
+            position = index;
+        }
+        pager.setCurrentItem(position, true);
+    }
+
+
+
 }

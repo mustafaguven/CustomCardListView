@@ -357,6 +357,8 @@ public class CenterizedViewPager extends ViewGroup {
     }
 
     void initViewPager() {
+
+
         setWillNotDraw(false);
         setDescendantFocusability(FOCUS_AFTER_DESCENDANTS);
         setFocusable(true);
@@ -391,13 +393,26 @@ public class CenterizedViewPager extends ViewGroup {
                         } else {
                             getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         }
-                        if(getChildCount()>0) {
+                        if (getChildCount() > 0) {
                             beginFakeDrag();
                             fakeDragBy(0);
                             endFakeDrag();
                         }
                     }
                 });
+
+        final float MIN_SCALE = 0.9f;
+        setPageTransformer(false, new CenterizedViewPager.PageTransformer() {
+            @Override
+            public void transformPage(View page, float position) {
+                float scaleFactor = MIN_SCALE
+                        + (1 - MIN_SCALE) * (1 - Math.abs(position));
+
+                page.setScaleX(scaleFactor);
+                page.setScaleY(scaleFactor);
+                //page.setRotationY(position * -30); //
+            }
+        });
     }
 
     @Override
@@ -681,6 +696,8 @@ public class CenterizedViewPager extends ViewGroup {
                 mDrawingOrder = DRAW_ORDER_DEFAULT;
             }
             if (needsPopulate) populate();
+
+
         }
     }
 
