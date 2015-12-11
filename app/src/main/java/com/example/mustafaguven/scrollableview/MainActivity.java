@@ -2,6 +2,7 @@ package com.example.mustafaguven.scrollableview;
 
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,9 +10,11 @@ import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.example.mustafaguven.scrollableview.customviews.CenterizedViewPagerAdapter;
 import com.example.mustafaguven.scrollableview.customviews.RecyclerCardViewList;
@@ -62,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
 
- /*       // Obtain MotionEvent object
+        // Obtain MotionEvent object
         long downTime = SystemClock.uptimeMillis();
         long eventTime = SystemClock.uptimeMillis() + 100;
         float x = 0.0f;
@@ -79,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         );
 // Dispatch touch event to view
         addnew.dispatchTouchEvent(motionEvent);
-        //pager.x(motionEvent, false);
+
 
         addnew.setOnTouchListener(new View.OnTouchListener()
         {
@@ -94,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
                 return true;
             }
-        });*/
+        });
 
 
 

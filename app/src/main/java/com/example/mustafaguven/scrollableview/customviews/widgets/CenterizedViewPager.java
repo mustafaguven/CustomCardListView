@@ -2014,7 +2014,27 @@ public class CenterizedViewPager extends ViewGroup {
                 break;
             case MotionEvent.ACTION_UP:
                 if (mIsBeingDragged) {
-                    needsInvalidate = x(ev, needsInvalidate);
+                    final VelocityTracker velocityTracker = mVelocityTracker;
+                    velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
+                    int initialVelocity = (int) VelocityTrackerCompat.getXVelocity(
+                            velocityTracker, mActivePointerId);
+                    mPopulatePending = true;
+                    final int width = getWidth();
+                    final int scrollX = getScrollX();
+                    final ItemInfo ii = infoForCurrentScrollPosition();
+                    final int currentPage = ii.position;
+                    final float pageOffset = (((float) scrollX / width) - ii.offset) / ii.widthFactor;
+                    final int activePointerIndex =
+                            MotionEventCompat.findPointerIndex(ev, mActivePointerId);
+                    final float x = MotionEventCompat.getX(ev, activePointerIndex);
+                    final int totalDelta = (int) (x - mInitialMotionX);
+                    int nextPage = determineTargetPage(currentPage, pageOffset, initialVelocity,
+                            totalDelta);
+                    setCurrentItemInternal(nextPage, true, true, initialVelocity);
+
+                    mActivePointerId = INVALID_POINTER;
+                    endDrag();
+                    needsInvalidate = mLeftEdge.onRelease() | mRightEdge.onRelease();
                 }
                 break;
             case MotionEvent.ACTION_CANCEL:
@@ -2045,32 +2065,7 @@ public class CenterizedViewPager extends ViewGroup {
         return true;
     }
 
-    public boolean x(MotionEvent ev, boolean needsInvalidate) {
 
-        final VelocityTracker velocityTracker = mVelocityTracker;
-        velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
-        int initialVelocity = (int) VelocityTrackerCompat.getXVelocity(
-                velocityTracker, mActivePointerId);
-        mPopulatePending = true;
-        final int width = getWidth();
-        final int scrollX = getScrollX();
-        final ItemInfo ii = infoForCurrentScrollPosition();
-        final int currentPage = ii.position;
-        final float pageOffset = (((float) scrollX / width) - ii.offset) / ii.widthFactor;
-        final int activePointerIndex =
-                MotionEventCompat.findPointerIndex(ev, mActivePointerId);
-        final float x = MotionEventCompat.getX(ev, activePointerIndex);
-        final int totalDelta = (int) (x - mInitialMotionX);
-        int nextPage = determineTargetPage(currentPage, pageOffset, initialVelocity,
-                totalDelta);
-        setCurrentItemInternal(nextPage, true, true, initialVelocity);
-
-        mActivePointerId = INVALID_POINTER;
-        endDrag();
-        needsInvalidate = mLeftEdge.onRelease() | mRightEdge.onRelease();
-
-        return needsInvalidate;
-    }
 
     private boolean performDrag(float x) {
         boolean needsInvalidate = false;
