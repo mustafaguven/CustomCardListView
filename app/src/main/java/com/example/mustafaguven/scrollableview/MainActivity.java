@@ -19,6 +19,7 @@ import com.example.mustafaguven.scrollableview.customviews.RecyclerCardViewList;
 import com.example.mustafaguven.scrollableview.customviews.RecyclerCardViewListAdapter;
 import com.example.mustafaguven.scrollableview.customviews.RoundedCard;
 import com.example.mustafaguven.scrollableview.customviews.RoundedMessageCard;
+import com.example.mustafaguven.scrollableview.customviews.VerticalCardViewList;
 import com.example.mustafaguven.scrollableview.customviews.widgets.CenterizedViewPager;
 
 import java.util.ArrayList;
@@ -58,11 +59,12 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         samplePager();
+        sampleForVerticalCardViewList();
 
         //lblDuration.setDuration(3662);
         //sampleForRecyclerCardViewList();
 /*        sampleForCustomCardViewList();
-        sampleForVerticalCardViewList();*/
+       */
     }
 
     @OnClick(R.id.addnew)
@@ -149,29 +151,29 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    /*private void sampleForVerticalCardViewList() {
+    private void sampleForVerticalCardViewList() {
         final VerticalCardViewList v = (VerticalCardViewList) findViewById(R.id.myVerticalCardViewList);
         v.setOnEmpty(new VerticalCardViewList.OnEmptyListener() {
             @Override
             public void onEmpty() {
-                v.setVisibility(View.GONE);
+                //v.setVisibility(View.GONE);
             }
         });
 
         List<View> views = new ArrayList<>();
         for (int i = 0; i < 12; i++) {
-            *//*TextView t = new TextView(this);
+/*            *//**//*TextView t = new TextView(this);
             t.setText(String.valueOf(i));
             t.setTextSize(30);
             t.setGravity(Gravity.CENTER);
-            views.add(t);*//*
+            views.add(t);*//**//**/
             RoundedMessageCard r = new RoundedMessageCard(this);
             r.setTextName(String.format("%s nolu kart", i + 1));
             views.add(r);
         }
         v.setItems(views);
     }
-
+/*
     private void sampleForCustomCardViewList() {
         CustomCardViewList c = (CustomCardViewList) findViewById(R.id.myCustomCardViewList);
         c.setOnSelectedItemListener(new CustomCardViewList.OnSelectedItemListener() {

@@ -3,8 +3,6 @@ package com.example.mustafaguven.scrollableview.customviews;
 import android.annotation.TargetApi;
 import android.content.ClipData;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -105,7 +103,7 @@ public class VerticalCardViewList extends FrameLayout {
             LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             params.width = getViewWidth() - (i * convertDpToPixel(CARD_DEPTH_SPACE));
             params.height = convertDpToPixel(CARD_HEIGHT);
-            params.gravity = Gravity.CENTER;
+            params.gravity = Gravity.TOP | Gravity.CENTER;
             params.setMargins(0, getCardMargin(i), 0, 0);
             v.setLayoutParams(params);
             v.setClickable(true);

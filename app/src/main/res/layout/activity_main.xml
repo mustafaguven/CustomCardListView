@@ -14,12 +14,7 @@
         android:background="#EAECEC">
     </com.example.mustafaguven.scrollableview.customviews.CustomCardViewList>
 
-        <com.example.mustafaguven.scrollableview.customviews.VerticalCardViewList
-        android:id="@+id/myVerticalCardViewList"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:background="#EAECEC">
-    </com.example.mustafaguven.scrollableview.customviews.VerticalCardViewList>
+
 -->
 
     <Button
@@ -50,7 +45,12 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"/>
 
-
+    <com.example.mustafaguven.scrollableview.customviews.VerticalCardViewList
+        android:id="@+id/myVerticalCardViewList"
+        android:layout_below="@id/addnew"
+        android:layout_width="match_parent"
+        android:layout_height="220dp">
+    </com.example.mustafaguven.scrollableview.customviews.VerticalCardViewList>
 
 <!--    <com.example.mustafaguven.scrollableview.customviews.widgets.DurationTextView
         android:id="@+id/lblDuration"
